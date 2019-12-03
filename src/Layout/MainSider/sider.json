@@ -1,0 +1,49 @@
+{
+  "data": [
+    {
+      "name": "Заявки/Заявления",
+      "img": "icons/briefcase.svg",
+      "children": [
+        {
+          "name": "Заявки/Заявления"
+        }
+      ]
+    },
+    {
+      "name": "Подача отчетности",
+      "img": "icons/info.svg"
+    },
+    {
+      "name": "Лицевые счета",
+      "img": "icons/file-text.svg"
+    },
+    {
+      "name": "Государственные услуги",
+      "img": "icons/bell.svg"
+    },
+    {
+      "name": "Уведомления/Извещения",
+      "img": "icons/edit.svg"
+    },
+    {
+      "name": "Сервисы",
+      "img": "icons/command.svg"
+    },
+    {
+      "name": "Оплата налогов",
+      "img": "icons/credit-card.svg"
+    },
+    {
+      "name": "Реабилитация и банкротство",
+      "img": "icons/file-text.svg"
+    },
+    {
+      "name": "Помощь",
+      "img": "icons/help-circle.svg"
+    },
+    {
+      "name": "Настройки",
+      "img": "icons/settings.svg"
+    }
+  ]
+}
