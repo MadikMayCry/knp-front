@@ -34,7 +34,7 @@ class MainSider extends React.Component {
             <div className="logo-title">
               <div
                 style={{ color: "#fff", fontSize: "14px", lineHeight: "14px" }}
-                className="title"
+                className="knp-title"
               >
                 КАБИНЕТ НАЛОГОПЛАТЕЛЬЩИКА
               </div>

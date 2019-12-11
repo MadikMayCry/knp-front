@@ -1,37 +1,53 @@
 {
   "data": [
     {
-      "name": "Заявки/Заявления",
-      "img": "icons/briefcase.svg",
-      "children": [
-        {
-          "name": "Заявки/Заявления"
-        }
-      ]
-    },
-    {
-      "name": "Подача отчетности",
-      "img": "icons/info.svg"
-    },
-    {
-      "name": "Лицевые счета",
-      "img": "icons/file-text.svg"
-    },
-    {
-      "name": "Государственные услуги",
+      "name": "Уведомления/Извещения/Решения",
       "img": "icons/bell.svg"
     },
     {
-      "name": "Уведомления/Извещения",
-      "img": "icons/edit.svg"
+      "name": "Государственные услуги",
+      "img": "icons/edit.svg",
+      "children": [
+        {
+          "name": "Заявки/Заявления",
+          "img": "icons/briefcase.svg",
+          "children": [
+            {
+              "name": "Просмотреть Заявки/Заявления"
+            },
+            {
+              "name": "Подать Заявки/Заявления"
+            }
+          ]
+        },
+        {
+          "name": "Подача отчетности",
+          "img": "icons/info.svg",
+          "children": [
+            {
+              "name": "Просмотреть ФНО"
+            },
+            {
+              "name": "Подать ФНО"
+            }
+          ]
+        }
+      ]
     },
+
     {
       "name": "Сервисы",
-      "img": "icons/command.svg"
-    },
-    {
-      "name": "Оплата налогов",
-      "img": "icons/credit-card.svg"
+      "img": "icons/command.svg",
+      "children": [
+        {
+          "name": "Лицевые счета",
+          "img": "icons/file-text.svg"
+        },
+        {
+          "name": "Оплата налогов",
+          "img": "icons/credit-card.svg"
+        }
+      ]
     },
     {
       "name": "Реабилитация и банкротство",

@@ -6,13 +6,13 @@ import {
   Tabs,
   Button,
   Icon,
-  Select,
+  Modal,
   Divider,
   Steps,
   Alert,
   List,
   Avatar,
-  Tab
+  Breadcrumb
 } from "antd";
 
 import {
@@ -59,13 +59,32 @@ const { TabPane } = Tabs;
 const title = "Личный кабинет";
 const { Step } = Steps;
 
-const onClose = e => {
-  console.log(e, "I was closed.");
-};
-
-const { Header, Content } = Layout;
+const { Content } = Layout;
 
 const data = [
+  {
+    title: "Уважаемые налогоплательщики!",
+    desc:
+      "С 1 января 2020 года вступают в силу изменения  в Налоговый кодекс в части ..."
+  },
+  {
+    title: "Уважаемые налогоплательщики!",
+    desc:
+      "С 1 января 2020 года вступают в силу изменения  в Налоговый кодекс в части ..."
+  },
+  {
+    title: "Уважаемые налогоплательщики!",
+    desc:
+      "С 1 января 2020 года вступают в силу изменения  в Налоговый кодекс в части ..."
+  },
+  {
+    title: "Уважаемые налогоплательщики!",
+    desc:
+      "С 1 января 2020 года вступают в силу изменения  в Налоговый кодекс в части ..."
+  }
+];
+
+const messages = [
   {
     title: "Уважаемые налогоплательщики!",
     desc:
@@ -138,21 +157,40 @@ const data_service = [
 ];
 
 class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: false
+    };
+  }
+
+  showModal = () => {
+    this.setState({
+      visible: true
+    });
+  };
+
+  handleOk = e => {
+    console.log(e);
+    this.setState({
+      visible: false
+    });
+  };
+
+  handleCancel = e => {
+    console.log(e);
+    this.setState({
+      visible: false
+    });
+  };
+
   render() {
     return (
       <>
         <CabinetHeader title={title} />
         <Content style={{ margin: "0 16px", padding: "20px 10px" }}>
-          <Alert
-            message="Informational Notes"
-            type="info"
-            showIcon
-            message="17 нобяря. Уплата ЕЗН за период с 1 января по 1 октября 2019 года!"
-            type="warning"
-            closable
-            onClose={onClose}
-          />
-          <Row gutter={20} style={{ padding: "20px 00px" }} type="flex">
+          <Breadcrumb title={title} />
+          <Row gutter={20} type="flex" style={{ marginBottom: "30px" }}>
             <Col span={8} style={{}}>
               <div className="card-wrapper">
                 <Tabs defaultActiveKey="1">
@@ -192,13 +230,21 @@ class Home extends Component {
                     <div className="tab-content">
                       <List
                         itemLayout="horizontal"
-                        dataSource={data}
+                        dataSource={messages}
                         renderItem={item => (
                           <List.Item>
                             <List.Item.Meta
                               title={<Link to="/">{item.title}</Link>}
                               description={item.desc}
                             />
+                            <Button
+                              className="card-link"
+                              type="primary"
+                              size="small"
+                              onClick={this.showModal}
+                            >
+                              <Icon type="arrow-right" />
+                            </Button>
                           </List.Item>
                         )}
                       />
@@ -248,7 +294,7 @@ class Home extends Component {
               <div className="card-wrapper">
                 <div className="card">
                   <h4>Сервисы</h4>
-                  <Divider style={{ margin: "15px 10px" }} />
+                  <Divider style={{ margin: "15px 0px" }} />
                   <List
                     className="services"
                     size="large"
@@ -256,7 +302,14 @@ class Home extends Component {
                     renderItem={item => (
                       <List.Item>
                         <div className="desc-text">{item}</div>
-                        <Button className="card-link" type="primary" size="small">Подробнее</Button>
+                        <Button
+                          className="card-link"
+                          type="primary"
+                          size="small"
+                          onClick={this.showModal}
+                        >
+                          Подробнее
+                        </Button>
                       </List.Item>
                     )}
                   />
@@ -296,6 +349,24 @@ class Home extends Component {
             </Table>
           </Row>
         </Content>
+        <Modal
+          title="Уважаемые налогоплательщики"
+          visible={this.state.visible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+        >
+          <p>
+            С 1 января 2020 года вступают в силу изменения в Налоговый кодекс в
+            части изменения объекта налогообложения для налогоплательщика,
+            применяющего специальный налоговый режим для крестьянских или
+            фермерских хозяйств на основе уплаты единого земельного налога. Если
+            сейчас объект налогообложения - оценочная стоимость земли, то с 1
+            января 2020 года объектом налогообложения станет - доход, как в
+            упрощенной декларации. Ставка составит 0,5% от дохода. Данное
+            нововведение позволит налогоплательщикам, применяющим специальные
+            налоговые режимы и признаваемым субъектами микро- или малого
+          </p>
+        </Modal>
       </>
     );
   }

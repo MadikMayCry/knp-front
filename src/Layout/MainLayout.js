@@ -13,11 +13,9 @@ class MainLayout extends React.Component {
     return (
       <Layout style={{ minHeight: "100vh" }}>
         <MainSider />
-        <Layout>
+        <Layout style={{ backgroundColor: "#F0F3F9" }}>
           <ComponentLayout {...rest} />
-          <Footer style={{ textAlign: "center" }}>
-            КГД ©2019
-          </Footer>
+          <Footer style={{ textAlign: "center" }}>КГД ©2019</Footer>
         </Layout>
       </Layout>
     );

@@ -1,10 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import * as serviceWorker from "./serviceWorker";
+import { LocaleProvider } from "antd";
+import ru_RU from "antd/es/locale-provider/ru_RU";
+import moment from "moment";
+import "moment/locale/ru";
 
-ReactDOM.render(<App />, document.getElementById('root'));
+moment.locale("ru");
+
+ReactDOM.render(<LocaleProvider locale={ru_RU}><App /></LocaleProvider>, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

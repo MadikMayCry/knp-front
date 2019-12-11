@@ -37,7 +37,7 @@ class CabinetHeader extends Component {
     const { title } = this.props;
     return (
       <Header
-        style={{ background: "#fff", padding: "0px 50px" }}
+        style={{ background: "#F0F3F9", padding: "0px 50px" }}
         className="cabinet-header d-flex jc-fl-end"
       >
         <h1 className="page-title" style={{ marginRight: "auto" }}>

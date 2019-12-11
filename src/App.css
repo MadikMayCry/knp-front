@@ -45,6 +45,7 @@ a {
 
 .tax.statement {
   padding: 35px 5px;
+  background-color: #e9e9e9;
 }
 
 .ta {
@@ -187,7 +188,7 @@ a {
   margin-left: 10px;
 }
 
-.title {
+.knp-title {
   font-size: 20px;
   line-height: 28px;
   font-weight: bold;
@@ -374,7 +375,6 @@ a {
 .card-wrapper {
   background-color: #fff;
   border-radius: 5px;
-  min-height: 300px;
   padding: 10px;
   height: 100%;
 }
@@ -408,4 +408,29 @@ a {
 .card .card-link {
   margin-top: 10px;
   margin-left: auto;
+}
+
+.card-desc {
+  margin: 10px 0;
+}
+
+.error-message {
+  margin: 5px 0;
+}
+
+.breadcrumb-title {
+  margin-bottom: 20px;
+}
+
+.table-custom thead > tr > th {
+  background-color: #334ecd;
+  color: #fff;
+}
+
+.ant-form-item-label {
+  white-space: nowrap;
+  text-align: right;
+  vertical-align: middle;
+  max-width: 100%;
+  text-overflow: ellipsis;
 }
