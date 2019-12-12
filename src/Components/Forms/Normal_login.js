@@ -48,7 +48,7 @@ class NormalLoginForm extends React.Component {
             href=""
             style={{ marginLeft: "auto" }}
           >
-            Forgot password
+            Забыли пароль
           </a>
         </div>
         <div className="form-actions d-flex jc-sp-between">

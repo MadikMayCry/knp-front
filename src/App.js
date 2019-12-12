@@ -42,12 +42,12 @@ class App extends Component {
         <Switch>
           <Route
             exact
-            path="/authorization"
+            path="/"
             render={props => <AuthLayout {...props} component={AuthPage} />}
           />
           <Route
             exact
-            path="/"
+            path="/home"
             render={props => <MainLayout {...props} component={Home} />}
           />
           <Route

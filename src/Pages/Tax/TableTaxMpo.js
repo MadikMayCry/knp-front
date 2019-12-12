@@ -22,6 +22,7 @@ const TableTax = props => {
         className={body}
         className="table-custom"
         scroll={{ x: true }}
+        
       >
         <Column
           title="Действие"

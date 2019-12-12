@@ -3,7 +3,7 @@ import { Layout, Col, Row, Tabs, Button, Select, Divider } from "antd";
 
 // Images
 import logo from "./blank_logo.png";
-import bg from "./bg.png";
+import bg from "./BG.jpg";
 import gov from "./gov.png";
 import egov from "./egov.png";
 import kgd from "./kgd.png";
@@ -85,7 +85,7 @@ class AuthPage extends Component {
                     <NormalLoginForm />
                   </TabPane>
                   <TabPane tab="Регистрация" className="tab-title" key="2">
-                    Content of Tab Pane 2
+                    <NormalLoginForm />
                   </TabPane>
                 </Tabs>
               </div>
