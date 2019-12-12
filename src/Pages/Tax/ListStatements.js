@@ -34,28 +34,65 @@ const datesList = [
 
 const russianTitle = {
   taxPayerXin: "ИИН Налогоплательщика",
-  taxPayerName: "QWE",
-  formCode: "QWE",
-  formType: "QWE",
-  formHalfYear: "QWE",
-  formYear: "QWE",
-  formRegistrationNumber: "QWE",
-  revocationReason: "QWE",
-  revocationReasonDetail: "QWE",
-  oldCurrencyCode: "QWE",
-  newCurrencyCode: "QWE",
-  oldIsResident: "QWE",
-  oldTaxOrgCode: "QWE",
-  oldResidenceTaxOrgCode: "QWE",
-  oldHalfYear: "QWE",
-  oldYear: "QWE",
-  oldFormType: "QWE",
-  isLiquidationToRegular: "QWE",
-  sendDate: "QWE",
-  incomingDocumentNumber: "QWE",
-  taxOrgCode: "QWE",
-  receiveDate: "QWE",
-  submissionType: "QWE"
+  taxPayerName: "ФИО",
+  // formCode: "QWE", код нал отчетности
+  // formType: "QWE",
+  // formHalfYear: "QWE", //полугодие формы
+  // formYear: "QWE", // год формы
+  // formRegistrationNumber: "QWE", // д поле
+  // revocationReason: "QWE", // 4
+  // revocationReasonDetail: "QWE", // 5
+  // oldCurrencyCode: "QWE",// 6 Старый код валюты
+  // newCurrencyCode: "QWE", //
+  // oldIsResident: "QWE", // старый резидент
+  // oldTaxOrgCode: "QWE", // старый огд
+  // oldResidenceTaxOrgCode: "QWE", // Е
+  // oldHalfYear: "QWE", // полугодие старое
+  // oldYear: "QWE", // старый год
+  // oldFormType: "QWE", // вид формы прежнее ззначение
+  // isLiquidationToRegular: "QWE", // H
+  // sendDate: "QWE", // Дата подачи
+  // incomingDocumentNumber: "QWE", // Вход ном документа
+  // taxOrgCode: "QWE", // код ОГД
+  // receiveDate: "QWE", // Дата
+  // submissionType: "QWE" // Тип подачи
+  formCode: "Код налоговой отчетности",
+  formHalfYear: "Налоговый период полугодие",
+  formRegistrationNumber: "Регистрационный номер",
+  formType: "Вид налоговой отчетности",
+  formYear: "Налоговый период год",
+  incomingDocumentNumber: "Входящий номер документа",
+  isLiquidationToRegular:
+    "Отзыв ликвидационной налоговой отчетности в случае принятия налогоплательщиком решения о возобновлении деятельности после проведения налоговой проверки или завершения камерального контроля",
+  newContractDate: "string",
+  newContractNumber: "string",
+  newCurrencyCode: 0,
+  newFormType: 0,
+  newHalfYear: 0,
+  newIsResident: true,
+  newResidenceTaxOrgCode: "string",
+  newTaxOrgCode: "Старый код налогового органа",
+  newYear: 0,
+  oldContractDate: "string",
+  oldContractNumber: "string",
+  oldCurrencyCode: "Не указан или неверно указан код валюты",
+  oldFormType: "0",
+  oldHalfYear: 0,
+  oldIsResident: true,
+  oldResidenceTaxOrgCode: "string",
+  oldTaxOrgCode: "string",
+  oldYear: 0,
+  postalStampDate: "Дата почтового штемпеля",
+  receiveDate: "Дата приема",
+  revocationReason: 0,
+  revocationReasonDetail: 0,
+  sendDate: "Дата отправки",
+  signingOfficerName: "string",
+  signingTaxPayerName: "string",
+  submissionType: "Тип подачи",
+  taxOrgCode: "string",
+  taxPayerName: "ФИО",
+  taxPayerXin: "ИИН Налогоплательщика"
 };
 
 const appStatuses = {
@@ -138,22 +175,21 @@ class ListStatements extends Component {
   };
   renderSearchResults = () => {
     let { results } = this.state;
+    this.renameProp("taxPayerName", "ИИН", results);
     if (results) {
-      Object.entries(results).map(([key, value]) => {
-        // this.renameProp(key, russianTitle.key, results);
-        results[russianTitle[key]] = value;
-        delete results[key];
-        console.log(results);
+      Object.entries(russianTitle).map(([key, value]) => {
+        let temp = results[key];
+        if (temp) {
+          results[value] = temp;
+          delete results[key];
+        }
       });
+
       return (
         <Descriptions bordered size="middle" column={1}>
-          {Object.entries(results).map(([key, value]) =>
-            typeof value != "object" ? (
-              <Descriptions.Item label={key}>{value}</Descriptions.Item>
-            ) : (
-              ""
-            )
-          )}
+          {Object.entries(results).map(([key, value]) => (
+            <Descriptions.Item label={key}>{value}</Descriptions.Item>
+          ))}
         </Descriptions>
       );
     }
@@ -186,6 +222,7 @@ class ListStatements extends Component {
         this.setState({
           results: response.data
         });
+        console.log(response.data);
 
         this.showModal();
       })

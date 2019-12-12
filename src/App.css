@@ -434,3 +434,26 @@ a {
   max-width: 100%;
   text-overflow: ellipsis;
 }
+
+.revocReason .ant-radio-wrapper {
+  max-width: 100%;
+  white-space: normal;
+  margin: 13px 0;
+  width: 100%;
+  position: relative;
+}
+
+.revocReason .ant-radio-wrapper:after {
+  content: " ";
+  height: 1px;
+  background-color: #cacaca;
+  margin: 0 auto;
+  position: absolute;
+  bottom: -10px;
+  left: 10px;
+  right: 10px;
+}
+
+.desc-form{
+  line-height: 20px;
+}

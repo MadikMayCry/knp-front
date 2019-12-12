@@ -29,6 +29,7 @@ import FNO from "Pages/FNO";
 import WrapperFNOMPO from "Pages/FNO/fno-mpo";
 import Declaration from "Pages/Declaration";
 import ZeroZeroOneWrapper from "Pages/Tax/CreateForms/ZeroZeroOne";
+import ZeroZeroSevenWrapper from "Pages/Tax/CreateForms/ZeroZeroSeven";
 
 class App extends Component {
   constructor(props) {
@@ -114,6 +115,13 @@ class App extends Component {
             path="/zero-zero-one"
             render={props => (
               <MainLayout {...props} component={ZeroZeroOneWrapper} />
+            )}
+          />
+          <Route
+            exact
+            path="/zero-zero-seven"
+            render={props => (
+              <MainLayout {...props} component={ZeroZeroSevenWrapper} />
             )}
           />
         </Switch>
