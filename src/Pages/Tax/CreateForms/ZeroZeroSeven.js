@@ -77,7 +77,10 @@ const datesList = [
   "suspensionStartDate"
 ];
 
-const halfYearData = ["Первое полугодие", "Второе полугодие"];
+const halfYearData = {
+  1: "Первое полугодие",
+  2: "Второе полугодие"
+};
 
 const years = () => {
   const years = [];
@@ -105,8 +108,6 @@ class ZeroZeroSeven extends Component {
         lastname: "ЖОЛДАСБЕКОВА",
         patronymic: "КАПАЛОВНА"
       },
-      halfYears: quarterData[halfYearData[0]],
-      quarter: quarterData[halfYearData[0]][0],
       ogd_all: undefined,
       reqbody: {},
       isFetching: false,
@@ -143,7 +144,6 @@ class ZeroZeroSeven extends Component {
       });
       if (!err) {
         this.formData(data);
-        
       }
     });
   };
@@ -171,19 +171,17 @@ class ZeroZeroSeven extends Component {
   async sendPostsAsync(body) {
     try {
       console.log(body);
-      debugger
       axios
         .post(this.state.url, body)
         .then(function(response) {
           console.log(response);
-          message.success('Успешно');
+          message.success("Успешно");
         })
         .catch(function(error) {
           console.log(error);
-          message.error('Неудачно');
+          message.error("Неудачно");
         });
     } catch (e) {
-      
       this.setState({ ...this.state, isFetching: false });
     }
   }
@@ -276,7 +274,6 @@ class ZeroZeroSeven extends Component {
               <Col span={6}>
                 <Form.Item label="Вид налоговой отчетности">
                   {getFieldDecorator("formType", {
-                    rules: [{ required: true, message: "Введите данные" }]
                   })(
                     <Select
                       style={{ width: "100%" }}
@@ -300,7 +297,14 @@ class ZeroZeroSeven extends Component {
             <Row gutter={20}>
               <Col span={8}>
                 <Form.Item label="Регистрационный номер">
-                  {getFieldDecorator("formRegistrationNumber")(
+                  {getFieldDecorator("formRegistrationNumber", {
+                    rules: [
+                      {
+                        required: true,
+                        message: "Введите данные"
+                      }
+                    ]
+                  })(
                     <Input
                       style={{ width: "100%" }}
                       placeholder="Введите номер"
@@ -332,8 +336,8 @@ class ZeroZeroSeven extends Component {
                       style={{ width: "100%" }}
                       placeholder="Выберите Полугодие"
                     >
-                      {halfYearData.map(halfYear => (
-                        <Option key={halfYear}>{halfYear}</Option>
+                      {Object.entries(halfYearData).map(([key, item]) => (
+                        <Option value={key}>{item}</Option>
                       ))}
                     </Select>
                   )}
@@ -343,16 +347,16 @@ class ZeroZeroSeven extends Component {
               <Col span={4}>
                 <Form.Item label="Квартал">
                   {/* {getFieldDecorator("quarter")( */}
-                    <Select
-                      style={{ width: "100%" }}
-                      placeholder="Выберите Квартал"
-                      allowClear
-                    >
-                      <Option value={1}>Первый квартал</Option>
-                      <Option value={2}>Второй квартал</Option>
-                      <Option value={3}>Третий квартал</Option>
-                      <Option value={4}>Четвертый квартал</Option>
-                    </Select>
+                  <Select
+                    style={{ width: "100%" }}
+                    placeholder="Выберите Квартал"
+                    allowClear
+                  >
+                    <Option value={1}>Первый квартал</Option>
+                    <Option value={2}>Второй квартал</Option>
+                    <Option value={3}>Третий квартал</Option>
+                    <Option value={4}>Четвертый квартал</Option>
+                  </Select>
                   {/* )} */}
                 </Form.Item>
               </Col>
@@ -584,7 +588,7 @@ class ZeroZeroSeven extends Component {
                       style={{ width: "100%" }}
                       placeholder="Выберите признак"
                     >
-                      <Option value={true} >
+                      <Option value={true}>
                         резидент Республики Казахстан
                       </Option>
                       <Option value={false}>
@@ -766,7 +770,9 @@ class ZeroZeroSeven extends Component {
               </Col>
               <Col span={6}>
                 <Form.Item>
-                  {getFieldDecorator("oldYear")(
+                  {getFieldDecorator("oldYear", {
+                    rules: [{ required: true, message: "Введите данные" }]
+                  })(
                     <Select
                       style={{ width: "100%" }}
                       placeholder="Выберите Год"
@@ -786,8 +792,8 @@ class ZeroZeroSeven extends Component {
                       style={{ width: "100%" }}
                       placeholder="Выберите Полугодие"
                     >
-                      {halfYearData.map(halfYear => (
-                        <Option key={halfYear}>{halfYear}</Option>
+                      {Object.entries(halfYearData).map(([key, item]) => (
+                        <Option value={key}>{item}</Option>
                       ))}
                     </Select>
                   )}
@@ -848,8 +854,8 @@ class ZeroZeroSeven extends Component {
                       style={{ width: "100%" }}
                       placeholder="Выберите Полугодие"
                     >
-                      {halfYearData.map(halfYear => (
-                        <Option key={halfYear}>{halfYear}</Option>
+                      {Object.entries(halfYearData).map(([key, item]) => (
+                        <Option value={key}>{item}</Option>
                       ))}
                     </Select>
                   )}
@@ -1014,7 +1020,7 @@ class ZeroZeroSeven extends Component {
               <Col span={6}>
                 <Form.Item label="Входящий номер документа">
                   {getFieldDecorator("incomingDocumentNumber")(
-                    <Input disabled placeholder="Номер документа" />
+                    <Input placeholder="Номер документа" />
                   )}
                 </Form.Item>
               </Col>
@@ -1066,16 +1072,17 @@ class ZeroZeroSeven extends Component {
               </Col>
               <Col span={6}>
                 <Form.Item label="Дата приема налогового заявления">
-                  {getFieldDecorator("receiveDate")(
-                    <DatePicker style={{ width: "100%" }} disabled />
-                  )}
+                  {getFieldDecorator("receiveDate", {
+                    initialValue: moment()
+                  })(<DatePicker style={{ width: "100%" }} disabled />)}
                 </Form.Item>
               </Col>
               <Col span={6}>
                 <Form.Item label="Дата почтового штемпеля">
-                  {getFieldDecorator("postalStampDate")(
-                    <DatePicker style={{ width: "100%" }} disabled />
-                  )}
+                  {getFieldDecorator(
+                    "postalStampDate",
+                    {}
+                  )(<DatePicker style={{ width: "100%" }} disabled />)}
                 </Form.Item>
               </Col>
             </Row>
