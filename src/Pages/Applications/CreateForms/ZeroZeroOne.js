@@ -9,6 +9,7 @@ import {
   DatePicker,
   Form,
   Button,
+  message,
   Collapse,
   Typography,
   Tooltip,
@@ -79,7 +80,6 @@ class ZeroZeroOne extends Component {
   };
 
   formData = data => {
-
     this.sendPosts(data);
   };
 
@@ -106,6 +106,8 @@ class ZeroZeroOne extends Component {
         .post(this.state.url, body)
         .then(function(response) {
           console.log(response);
+          message.succes("Форма успешно создана");
+          this.resetFields();
         })
         .catch(function(error) {
           console.log(error);
@@ -439,6 +441,20 @@ class ZeroZeroOne extends Component {
               </Button>
               <Button type="primary" htmlType="submit">
                 Отправить
+              </Button>
+            </Row>
+            <Row type="flex" style={{ marginTop: 20 }}>
+            <Button type="default" style={{ marginRight: 10 }}>
+                Сохранить в КНП
+              </Button>
+              <Button type="default" style={{ marginRight: 10 }}>
+                Проверить заполнение
+              </Button>
+              <Button type="default" style={{ marginRight: 10 }}>
+                Отправить в ОГД
+              </Button>
+              <Button type="default" style={{ marginRight: 10 }}>
+                Печать
               </Button>
             </Row>
           </Form>

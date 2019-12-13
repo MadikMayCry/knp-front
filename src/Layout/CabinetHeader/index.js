@@ -9,10 +9,13 @@ import {
   Button,
   Select,
   Row,
+  Divider,
   Tooltip,
   List,
   Avatar
 } from "antd";
+
+import bg from "./bg.png";
 
 const { Option } = Select;
 const { Header, Content } = Layout;
@@ -69,6 +72,49 @@ const menu = (
 );
 
 class CabinetHeader extends Component {
+  calendarsList = () => {
+    return dates.map(item => {
+      if (item == 13) {
+        return (
+          <Tooltip title="Сегодня 13 декабря" placement="bottom">
+            <Button shape="circle" size="default" type="primary">
+              {item}
+            </Button>
+          </Tooltip>
+        );
+      }
+      if (item == 20) {
+        return (
+          <Tooltip title="Срок уплаты акциза + за СТП" placement="bottom">
+            <Button shape="circle" size="default" type="danger">
+              {item}
+            </Button>
+          </Tooltip>
+        );
+      }
+      if (item == 31) {
+        return (
+          <Tooltip title="Срок уплаты налога на транспорт" placement="bottom">
+            <Button
+              shape="circle"
+              size="default"
+              style={{
+                backgroundColor: "#ffec3d"
+              }}
+            >
+              {item}
+            </Button>
+          </Tooltip>
+        );
+      }
+      return (
+        <Button shape="circle" size="default" type="link">
+          {item}
+        </Button>
+      );
+    });
+  };
+
   render() {
     const { title } = this.props;
     return (
@@ -80,6 +126,7 @@ class CabinetHeader extends Component {
           <h1 className="page-title" style={{ marginRight: "auto" }}>
             {title}
           </h1>
+          <img style={{ height: "30px", marginRight: 10 }} src={bg} />
           <Button style={{ marginRight: "10px" }}>
             <Icon type="calendar" />
           </Button>
@@ -114,27 +161,32 @@ class CabinetHeader extends Component {
             <Icon type="logout" />
           </Button>
         </Header>
-        <Content style={{ margin: "0 16px", padding: "20px 10px", display: "none" }}>
+        <Content style={{ margin: "0 16px", padding: "10px", flex: "initial" }}>
           <Row
             gutter={20}
             type="flex"
-            style={{ marginBottom: "30px", justifyContent: "space-between" }}
+            style={{ justifyContent: "space-between" }}
           >
-            {dates.map(item =>
-              item == 13 ? (
-                <Tooltip title="Сегодня 13 декабря" placement="bottom">
-                  <Button shape="circle" size="default" type="primary">
-                    {item}
-                  </Button>
-                </Tooltip>
-              ) : (
-                <Button shape="circle" size="default" type="link">
-                  <Tooltip placement="bottom" title={item}>
-                    {item}
-                  </Tooltip>
-                </Button>
-              )
-            )}
+            <Button type="link">
+              <Icon type="left-square" />
+              Ноябрь 2019
+            </Button>
+            <Button type="default">
+              <Icon type="calendar" />
+              Декабрь 2019
+            </Button>
+            <Button type="link">
+              Январь 2020
+              <Icon type="right-square" />
+            </Button>
+          </Row>
+          <Divider style={{ marginTop: 10 }} />
+          <Row
+            gutter={20}
+            type="flex"
+            style={{ marginBottom: "10px", justifyContent: "space-between" }}
+          >
+            {this.calendarsList()}
           </Row>
         </Content>
       </>

@@ -2,8 +2,8 @@
   "data": [
     {
       "name": "Главная",
-      "img": "icons/bell.svg",
-      "url": "/"
+      "img": "icons/briefcase.svg",
+      "url": "/home"
     },
 
     {
@@ -16,7 +16,7 @@
       "children": [
         {
           "name": "Заявки/Заявления",
-          "img": "icons/briefcase.svg",
+          "img": "icons/file.svg",
           "children": [
             {
               "name": "Просмотреть Заявки/Заявления",

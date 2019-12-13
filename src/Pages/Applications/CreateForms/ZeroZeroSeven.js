@@ -1098,6 +1098,20 @@ class ZeroZeroSeven extends Component {
                 Отправить
               </Button>
             </Row>
+            <Row type="flex" style={{ marginTop: 20 }}>
+            <Button type="default" style={{ marginRight: 10 }}>
+                Сохранить в КНП
+              </Button>
+              <Button type="default" style={{ marginRight: 10 }}>
+                Проверить заполнение
+              </Button>
+              <Button type="default" style={{ marginRight: 10 }}>
+                Отправить в ОГД
+              </Button>
+              <Button type="default" style={{ marginRight: 10 }}>
+                Печать
+              </Button>
+            </Row>
           </Form>
         </Content>
       </>

@@ -20,7 +20,8 @@ import {
   Radio,
   Divider,
   Breadcrumb,
-  Layout
+  Layout,
+  message
 } from "antd";
 
 const { Content } = Layout;
@@ -336,9 +337,12 @@ class Declaration extends Component {
         .post(this.state.url, body)
         .then(function(response) {
           console.log(response);
+          message.succes("Форма успешно создана");
+          this.resetFields();
         })
         .catch(function(error) {
           console.log(error);
+          message.error("Неудачно");
         });
     } catch (e) {
       this.setState({ ...this.state, isFetching: false });
@@ -901,7 +905,9 @@ class Declaration extends Component {
                           >
                             {this.state.ogd_all
                               ? this.state.ogd_all.map(item => (
-                                  <Option value={item.code}>{item.code}, {item.name}</Option>
+                                  <Option value={item.code}>
+                                    {item.code}, {item.name}
+                                  </Option>
                                 ))
                               : ""}
                           </Select>
@@ -922,7 +928,9 @@ class Declaration extends Component {
                           >
                             {this.state.ogd_all
                               ? this.state.ogd_all.map(item => (
-                                  <Option value={item.code}>{item.code}, {item.name}</Option>
+                                  <Option value={item.code}>
+                                    {item.code}, {item.name}
+                                  </Option>
                                 ))
                               : ""}
                           </Select>
@@ -1010,6 +1018,20 @@ class Declaration extends Component {
                 </Button>
                 <Button type="primary" htmlType="submit">
                   Отправить
+                </Button>
+              </Row>
+              <Row type="flex" style={{ marginTop: 20 }}>
+                <Button type="default" style={{ marginRight: 10 }}>
+                  Сохранить в КНП
+                </Button>
+                <Button type="default" style={{ marginRight: 10 }}>
+                  Проверить заполнение
+                </Button>
+                <Button type="default" style={{ marginRight: 10 }}>
+                  Отправить в ОГД
+                </Button>
+                <Button type="default" style={{ marginRight: 10 }}>
+                  Печать
                 </Button>
               </Row>
             </Form>

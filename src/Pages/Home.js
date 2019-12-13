@@ -110,7 +110,7 @@ const data_link = [
 
 const data_service = [
   {
-    title: "Уважаемые налогоплательщики!",
+    title: "Регистрационный учет лица, занимающегося частной практикой",
     icon: "file-text",
     icon_color: "#334ECD",
     desc:
@@ -120,7 +120,7 @@ const data_service = [
     }
   },
   {
-    title: "Уважаемые налогоплательщики!",
+    title: "Регистрация налогоплательщиков",
     icon: "user",
     icon_color: "#E53131",
     desc:
@@ -130,7 +130,7 @@ const data_service = [
     }
   },
   {
-    title: "Уважаемые налогоплательщики!",
+    title: "Регистрационный учет в качестве электронного налогоплательщика",
     icon: "credit-card",
     icon_color: "#2CCE1E",
     desc:
@@ -140,13 +140,33 @@ const data_service = [
     }
   },
   {
-    title: "Уважаемые налогоплательщики!",
+    title: "Регистрационный учет плательщиков налога на добавленную стоимость",
     icon: "bell",
     icon_color: "#EFC224",
     desc:
       "Изменение сроков исполнения налогового обязательства по уплате налогов и (или) плат",
     style: {
       background: "rgba(239, 194, 36, 0.2)"
+    }
+  },
+  {
+    title: "Выдача лицензии на производство этилового спирта",
+    icon: "user",
+    icon_color: "#E53131",
+    desc:
+      "Изменение сроков исполнения налогового обязательства по уплате налогов и (или) плат",
+    style: {
+      background: "rgba(229, 49, 49, 0.2)"
+    }
+  },
+  {
+    title: "Выдача лицензии на производство алкогольной продукции",
+    icon: "file-text",
+    icon_color: "#334ECD",
+    desc:
+      "Изменение сроков исполнения налогового обязательства по уплате налогов и (или) плат",
+    style: {
+      background: "rgba(51, 78, 205, 0.2)"
     }
   }
 ];
@@ -277,7 +297,7 @@ class Home extends Component {
                             </Avatar>
                           }
                           title={<a href="">{item.title}</a>}
-                          description={item.desc}
+                          // description={item.desc}
                         />
                       </List.Item>
                     )}
