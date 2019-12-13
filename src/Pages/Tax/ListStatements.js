@@ -16,7 +16,7 @@ import {
 } from "antd";
 import CabinetHeader from "Layout/CabinetHeader";
 
-import TableTaxMpo from "./TableTaxMpo";
+import TableTax from "./TableTax";
 
 import axios from "axios";
 
@@ -406,7 +406,7 @@ class ListStatements extends Component {
                   )}
                 </Form.Item>
               </Col>
-              <Col span={6}>
+              {/* <Col span={6}>
                 <Form.Item label="Сведения о задолженности">
                   {getFieldDecorator("debtStatus")(
                     <Select
@@ -427,7 +427,7 @@ class ListStatements extends Component {
                     </Select>
                   )}
                 </Form.Item>
-              </Col>
+              </Col> */}
               <Col span={6}>
                 <Form.Item label="Дата приема с">
                   {getFieldDecorator("receiveStartDate", {
@@ -444,7 +444,7 @@ class ListStatements extends Component {
                   )}
                 </Form.Item>
               </Col>
-              <Col span={6}>
+              {/* <Col span={6}>
                 <Form.Item label="Дата приема по">
                   {getFieldDecorator("receiveEndDate")(
                     <DatePicker
@@ -457,7 +457,7 @@ class ListStatements extends Component {
                     />
                   )}
                 </Form.Item>
-              </Col>
+              </Col> */}
               <Col span={6}>
                 <Form.Item label="Дата подачи с">
                   {getFieldDecorator("sendStartDate")(
@@ -486,14 +486,14 @@ class ListStatements extends Component {
                   )}
                 </Form.Item>
               </Col>
-              <Col span={6}>
+              {/* <Col span={6}>
                 <Form.Item label="Номер уведомления">
                   {getFieldDecorator("registrationNumber")(
                     <Input placeholder="Введите номер" />
                   )}
                 </Form.Item>
-              </Col>
-              <Col span={6}>
+              </Col> */}
+              {/* <Col span={6}>
                 <Form.Item label="Способ предоставления">
                   {getFieldDecorator("submissionType")(
                     <Select
@@ -514,9 +514,9 @@ class ListStatements extends Component {
                     </Select>
                   )}
                 </Form.Item>
-              </Col>
+              </Col> */}
 
-              <Col span={6}>
+              {/* <Col span={6}>
                 <Form.Item label="Код ОГД">
                   {getFieldDecorator("taxOrgCode")(
                     <Select
@@ -536,7 +536,7 @@ class ListStatements extends Component {
                     </Select>
                   )}
                 </Form.Item>
-              </Col>
+              </Col> */}
             </Row>
             <Row type="flex" style={{ marginTop: 30 }}>
               <Button
@@ -552,7 +552,7 @@ class ListStatements extends Component {
             </Row>
           </Form>
           <Row gutter={20}>
-            <TableTaxMpo
+            <TableTax
               data={this.state.data}
               isFetching={this.state.isFetching}
               getCardData={this.getCardData}

@@ -26,7 +26,7 @@ import {
   Layout
 } from "antd";
 
-const title = "Журнал ФО";
+const title = "";
 
 const { Content } = Layout;
 const { Option } = Select;

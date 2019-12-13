@@ -31,19 +31,7 @@ const TableMpo = props => {
           dataIndex="registrationNumber"
           key="registrationNumber"
         />
-        <Column
-          title="ИИН/БИН налогоплательщика"
-          dataIndex="taxPayerName"
-          key="taxPayerName"
-        />
-        <Column title="ФИО" dataIndex="taxPayerXin" key="taxPayerXin" />
         <Column title="Статус" dataIndex="appStatus" key="appStatus" />
-        <Column
-          title="Код ОГД"
-          dataIndex="taxOrgFullName"
-          key="taxOrgFullName"
-        />
-        <Column title="Задолженность" dataIndex="debtStatus" key="debtStatus" />
       </Table>
       <p>{props.isFetching ? "Fetching posts..." : ""}</p>
     </>

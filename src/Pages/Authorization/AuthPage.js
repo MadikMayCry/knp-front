@@ -84,9 +84,6 @@ class AuthPage extends Component {
                   <TabPane tab="Авторизация" className="tab-title" key="1">
                     <NormalLoginForm />
                   </TabPane>
-                  <TabPane tab="Регистрация" className="tab-title" key="2">
-                    <NormalLoginForm />
-                  </TabPane>
                 </Tabs>
               </div>
             </Col>

@@ -23,15 +23,8 @@
               "url": "/tax-list"
             },
             {
-              "name": "Подать Заявки/Заявления"
-            },
-            {
-              "name": "Форма 001",
-              "url": "/zero-zero-one"
-            },
-            {
-              "name": "Форма 007",
-              "url": "/zero-zero-seven"
+              "name": "Подать Заявки/Заявления",
+              "url": "applications"
             }
           ]
         },
@@ -40,12 +33,12 @@
           "img": "icons/info.svg",
           "children": [
             {
-              "name": "Просмотреть ФНО",
+              "name": "Просмотреть ФО",
               "url": "/fno"
             },
             {
-              "name": "Подать ФНО",
-              "url": "/declaration"
+              "name": "Подать ФО",
+              "url": "/fno-list"
             }
           ]
         }

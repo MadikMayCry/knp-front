@@ -39,7 +39,7 @@ const datesList = [
   "suspensionStartDate"
 ];
 
-const title = "Журнал ФНО";
+const title = "";
 class ZeroZeroOne extends Component {
   constructor(props) {
     super(props);

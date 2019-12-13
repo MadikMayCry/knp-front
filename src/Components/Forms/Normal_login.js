@@ -1,25 +1,51 @@
 import React from "react";
-import { Form, Icon, Input, Button, Checkbox } from "antd";
-
+import { Form, Icon, Input, Button, Select, Checkbox, message } from "antd";
+import { Redirect } from "react-router-dom";
 const rules = {
   xin: [{ required: true, message: "Введите ИИН!" }],
   password: [{ required: true, message: "Введите пароль!" }]
 };
 
+const userTypes = [
+  "Юридическое лицо",
+  "Индивидуальные предприниматели",
+  "Физические лица",
+  "Администратор в процедуре реабилитации и банкротстве",
+  "Лица, занимающиеся частной практикой",
+  "Уполномоченный/законный представитель"
+];
+
 class NormalLoginForm extends React.Component {
+  state = {
+    redirect: false
+  };
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log("Received values of form: ", values);
+      if (!err && values.xin == 591207400104 && values.password == "admin") {
+        this.setState({
+          redirect: true
+        });
+        return;
       }
+      message.error("Неверные данные");
     });
+  };
+
+  renderRedirect = () => {
+    if (this.state.redirect) {
+      console.log("redirecting");
+
+      return <Redirect to="/home" />;
+    }
   };
 
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
+        {this.renderRedirect()}
         <Form.Item>
           {getFieldDecorator("xin", {
             rules: rules.xin
@@ -41,6 +67,13 @@ class NormalLoginForm extends React.Component {
             />
           )}
         </Form.Item>
+        <Form.Item>
+          <Select placeholder="Выберите роль">
+            {userTypes.map(item => (
+              <Select.Option value={item}>{item}</Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
         <div className="form-actions d-flex jc-sp-between">
           <Checkbox>Запомнить меня</Checkbox>
           <a
@@ -59,11 +92,7 @@ class NormalLoginForm extends React.Component {
           >
             Войти
           </Button>
-          <Button
-            className="yellow-btn"
-          >
-            Войти по ЭЦП
-          </Button>
+          <Button className="yellow-btn">Войти по ЭЦП</Button>
         </div>
       </Form>
     );

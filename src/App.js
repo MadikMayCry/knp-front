@@ -28,8 +28,11 @@ import ReactHookForm from "Pages/HooksForm/ReactHookForm";
 import FNO from "Pages/FNO";
 import WrapperFNOMPO from "Pages/FNO/fno-mpo";
 import Declaration from "Pages/Declaration";
-import ZeroZeroOneWrapper from "Pages/Tax/CreateForms/ZeroZeroOne";
-import ZeroZeroSevenWrapper from "Pages/Tax/CreateForms/ZeroZeroSeven";
+import ZeroZeroOneWrapper from "Pages/Applications/CreateForms/ZeroZeroOne";
+import ZeroZeroSevenWrapper from "Pages/Applications/CreateForms/ZeroZeroSeven";
+import Applications from "Pages/Applications";
+import FnoList from "Pages/FNO/journal";
+
 
 class App extends Component {
   constructor(props) {
@@ -78,21 +81,20 @@ class App extends Component {
           <Route
             exact
             path="/fno-list"
-            render={props => <MainLayout {...props} component={FNOList} />}
+            render={props => <MainLayout {...props} component={FnoList} />}
           />
-          s
           <Route
             exact
             path="/sign-up-form"
             render={props => <MainLayout {...props} component={Signup} />}
           />
-          <Route
+          {/* <Route
             exact
             path="/react-hook-form"
             render={props => (
               <MainLayout {...props} component={ReactHookForm} />
             )}
-          />
+          /> */}
           <Route
             exact
             path="/fno"
@@ -112,17 +114,22 @@ class App extends Component {
           />
           <Route
             exact
-            path="/zero-zero-one"
+            path="/001"
             render={props => (
               <MainLayout {...props} component={ZeroZeroOneWrapper} />
             )}
           />
           <Route
             exact
-            path="/zero-zero-seven"
+            path="/007"
             render={props => (
               <MainLayout {...props} component={ZeroZeroSevenWrapper} />
             )}
+          />
+          <Route
+            exact
+            path="/applications"
+            render={props => <MainLayout {...props} component={Applications} />}
           />
         </Switch>
       </Router>
