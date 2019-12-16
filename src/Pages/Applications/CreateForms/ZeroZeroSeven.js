@@ -103,10 +103,10 @@ class ZeroZeroSeven extends Component {
     super(props);
     this.state = {
       authedUser: {
-        taxPayerXin: "591207400104",
-        name: "ШОЛПАН",
-        lastname: "ЖОЛДАСБЕКОВА",
-        patronymic: "КАПАЛОВНА"
+        taxPayerXin: "560319301503",
+        name: "Жана",
+        lastname: "Канафина",
+        patronymic: "Аманбаевна"
       },
       ogd_all: undefined,
       reqbody: {},
@@ -148,6 +148,11 @@ class ZeroZeroSeven extends Component {
     });
   };
 
+  succeedForm = () => {
+    message.success("Форма успешно создана");
+    return this.handleReset();
+  };
+
   formData = data => {
     this.sendPosts(data);
   };
@@ -173,10 +178,7 @@ class ZeroZeroSeven extends Component {
       console.log(body);
       axios
         .post(this.state.url, body)
-        .then(function(response) {
-          console.log(response);
-          message.success("Успешно");
-        })
+        .then(response => this.succeedForm())
         .catch(function(error) {
           console.log(error);
           message.error("Неудачно");
@@ -273,8 +275,10 @@ class ZeroZeroSeven extends Component {
               </Col>
               <Col span={6}>
                 <Form.Item label="Вид налоговой отчетности">
-                  {getFieldDecorator("formType", {
-                  })(
+                  {getFieldDecorator(
+                    "formType",
+                    {}
+                  )(
                     <Select
                       style={{ width: "100%" }}
                       placeholder="Выберите вид"
@@ -1063,6 +1067,14 @@ class ZeroZeroSeven extends Component {
                   )}
                 </Form.Item>
               </Col>
+              <Col span={6} style={{ display: "none" }}>
+                <Form.Item label="Источник">
+                  {getFieldDecorator("sourceSystem", {
+                    initialValue: "1",
+                    rules: [{ required: true, message: "Введите данные" }]
+                  })(<Input />)}
+                </Form.Item>
+              </Col>
               <Col span={6}>
                 <Form.Item label="Дата подачи налогового заявления">
                   {getFieldDecorator("sendDate", {
@@ -1099,7 +1111,7 @@ class ZeroZeroSeven extends Component {
               </Button>
             </Row>
             <Row type="flex" style={{ marginTop: 20 }}>
-            <Button type="default" style={{ marginRight: 10 }}>
+              <Button type="default" style={{ marginRight: 10 }}>
                 Сохранить в КНП
               </Button>
               <Button type="default" style={{ marginRight: 10 }}>

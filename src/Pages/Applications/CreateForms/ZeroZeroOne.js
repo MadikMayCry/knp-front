@@ -46,10 +46,10 @@ class ZeroZeroOne extends Component {
     super(props);
     this.state = {
       authedUser: {
-        taxPayerXin: "591207400104",
-        name: "ШОЛПАН",
-        lastname: "ЖОЛДАСБЕКОВА",
-        patronymic: "КАПАЛОВНА"
+        taxPayerXin: "560319301503",
+        name: "Жана",
+        lastname: "Канафина",
+        patronymic: "Аманбаевна"
       },
       ogd_all: undefined,
       reqbody: {},
@@ -84,7 +84,14 @@ class ZeroZeroOne extends Component {
   };
 
   handleReset = () => {
+    console.log("resetting");
+
     this.props.form.resetFields();
+  };
+
+  succeedForm = () => {
+    message.success("Форма успешно создана");
+    return this.handleReset();
   };
 
   getOgd = e =>
@@ -104,11 +111,7 @@ class ZeroZeroOne extends Component {
       console.log(body);
       axios
         .post(this.state.url, body)
-        .then(function(response) {
-          console.log(response);
-          message.succes("Форма успешно создана");
-          this.resetFields();
-        })
+        .then(response => this.succeedForm())
         .catch(function(error) {
           console.log(error);
         });
@@ -370,6 +373,15 @@ class ZeroZeroOne extends Component {
                   )}
                 </Form.Item>
               </Col>
+              <Col span={6} style={{ display: "none" }}>
+                <Form.Item label="Источник">
+                  {getFieldDecorator("sourceSystem", {
+                    initialValue: "1",
+                    rules: [{ required: true, message: "Введите данные" }]
+                  })(<Input />)}
+                </Form.Item>
+              </Col>
+
               <Col span={6}>
                 <Form.Item label="Код ОГД">
                   {getFieldDecorator("taxOrgCode", {
@@ -418,9 +430,9 @@ class ZeroZeroOne extends Component {
               </Col>
               <Col span={6}>
                 <Form.Item label="Дата приема налогового заявления">
-                  {getFieldDecorator("receiveDate")(
-                    <DatePicker style={{ width: "100%" }} disabled />
-                  )}
+                  {getFieldDecorator("receiveDate", {
+                    initialValue: moment()
+                  })(<DatePicker style={{ width: "100%" }} disabled />)}
                 </Form.Item>
               </Col>
               <Col span={6}>
@@ -444,7 +456,7 @@ class ZeroZeroOne extends Component {
               </Button>
             </Row>
             <Row type="flex" style={{ marginTop: 20 }}>
-            <Button type="default" style={{ marginRight: 10 }}>
+              <Button type="default" style={{ marginRight: 10 }}>
                 Сохранить в КНП
               </Button>
               <Button type="default" style={{ marginRight: 10 }}>

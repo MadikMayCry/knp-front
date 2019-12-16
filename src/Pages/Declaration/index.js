@@ -298,10 +298,10 @@ class Declaration extends Component {
     super(props);
     this.state = {
       authedUser: {
-        taxPayerXin: "591207400104",
-        name: "ШОЛПАН",
-        lastname: "ЖОЛДАСБЕКОВА",
-        patronymic: "КАПАЛОВНА"
+        taxPayerXin: "560319301503",
+        name: "Жана",
+        lastname: "Канафина",
+        patronymic: "Аманбаевна"
       },
       ogd_all: undefined,
       reqbody: {},
@@ -335,11 +335,7 @@ class Declaration extends Component {
       console.log(typeof body);
       axios
         .post(this.state.url, body)
-        .then(function(response) {
-          console.log(response);
-          message.succes("Форма успешно создана");
-          this.resetFields();
-        })
+        .then(response => this.succeedForm())
         .catch(function(error) {
           console.log(error);
           message.error("Неудачно");

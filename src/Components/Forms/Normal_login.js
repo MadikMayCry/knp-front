@@ -23,7 +23,7 @@ class NormalLoginForm extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      if (!err && values.xin == 591207400104 && values.password == "admin") {
+      if (!err && values.xin == 781227450219 && values.password == "admin") {
         this.setState({
           redirect: true
         });

@@ -391,12 +391,6 @@ a {
   flex-wrap: wrap;
 }
 
-.card .ant-list-item-meta-description {
-  max-height: 44px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .card .services .ant-list-items .ant-list-item .desc-text {
   max-height: 63px;
   overflow: hidden;
@@ -454,6 +448,95 @@ a {
   right: 10px;
 }
 
-.desc-form{
+.desc-form {
   line-height: 20px;
+}
+
+.event-row {
+  max-width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  margin: 5px;
+}
+
+.custom-tooltip .ant-tooltip-content {
+  min-width: 300px;
+}
+
+.custom-tooltip .ant-tooltip-arrow {
+  display: none;
+}
+
+.custom-tooltip .ant-tooltip-inner {
+  background-color: #1890ff;
+}
+
+.ant-btn.palette-red-6 {
+  background-color: #f5222d;
+  border-color: #f5222d;
+  color: #fff;
+}
+
+.ant-btn.palette-red-5 {
+  background-color: #ff4d4f;
+  border-color: #ff4d4f;
+  color: #fff;
+}
+
+.ant-btn.palette-volcano-6 {
+  background-color: #fa541c;
+  border-color: #fa541c;
+  color: #fff;
+}
+
+.ant-btn.palette-volcano-5 {
+  background-color: #ff7a45;
+  border-color: #ff7a45;
+  color: #fff;
+}
+
+.ant-btn.palette-orange-6 {
+  background-color: #fa8c16;
+  border-color: #fa8c16;
+  color: #fff;
+}
+
+.ant-btn.palette-orange-5 {
+  background-color: #ffa940;
+  border-color: #ffa940;
+  color: #fff;
+}
+
+.ant-btn.palette-gold-6 {
+  background-color: #faad14;
+  border-color: #faad14;
+  color: #fff;
+}
+
+.ant-btn.palette-gold-5 {
+  background-color: #ffc53d;
+  border-color: #ffc53d;
+  color: #fff;
+}
+
+.title-text-custom {
+  display: block;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 14px;
+  line-height: 22px;
+  margin-bottom: 5px;
+}
+
+.desc-text-custom {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  margin-bottom: 10px;
+}
+
+.yyy {
+  flex-wrap: wrap;
 }
