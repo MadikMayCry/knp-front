@@ -53,20 +53,6 @@ class CabinetHeader extends Component {
           <Button style={{ marginRight: "10px" }}>
             <Icon type="calendar" />
           </Button>
-          {/* <Select
-          showSearch
-          style={{ width: 200, margin: "0 10px" }}
-          placeholder="Полезные ссылки"
-          optionFilterProp="children"
-          filterOption={(input, option) =>
-            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >=
-            0
-          }
-        >
-          <Option value="jack">Ссылка на первый сайт</Option>
-          <Option value="lucy">Ссылка на второй сайт</Option>
-          <Option value="tom">Ссылка на третий сайт</Option>
-        </Select> */}
           <Dropdown overlay={menu}>
             <Button>
               <Icon type="link" />
