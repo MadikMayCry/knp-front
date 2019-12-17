@@ -1,6 +1,7 @@
 import React from "react";
-import { Table } from "antd";
+import { Table, Button } from "antd";
 import { jsx, css } from "@emotion/core";
+import pdfGenerator from "Utils/FOPdfMake";
 
 const { Column } = Table;
 
@@ -10,6 +11,13 @@ const body = css({
     backgroundColor: "blue"
   }
 });
+
+const _exportPdfTable = e => {
+  // change this number to generate more or less rows of data
+  let id = e.target.name;
+
+  pdfGenerator(id);
+};
 
 const ListTable = props => {
   return (
@@ -21,6 +29,17 @@ const ListTable = props => {
         className={body}
         className="table-custom"
       >
+        <Column
+          title="Действие"
+          key="action"
+          render={(text, record) => (
+            <>
+              <Button onClick={_exportPdfTable} name={record.taxFormId}>
+                Уведомление
+              </Button>
+            </>
+          )}
+        />
         {/* <Column title="Регистрационный номер" dataIndex="registrationNumber" key="registrationNumber" /> */}
         <Column
           title="Код ОГД"

@@ -213,7 +213,8 @@ class ZeroZeroSeven extends Component {
                       <Icon type="home" />
                     </Breadcrumb.Item>
                     <Breadcrumb.Item>
-                      Декларация для малого бизнеса
+                      Налоговое заявление налогоплательщика (налогового агента)
+                      об отзыве налоговой отчетности
                     </Breadcrumb.Item>
                   </Breadcrumb>
                 </>

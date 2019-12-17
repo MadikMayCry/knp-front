@@ -144,7 +144,8 @@ class ZeroZeroOne extends Component {
                       <Icon type="home" />
                     </Breadcrumb.Item>
                     <Breadcrumb.Item>
-                      Декларация для малого бизнеса
+                      Налоговое заявление о приостановлении (продлении,
+                      возобновлении) представления налоговой отчетности
                     </Breadcrumb.Item>
                   </Breadcrumb>
                 </>

@@ -69,7 +69,7 @@ const data = [
   },
   {
     title:
-      "Налогоплательщика (налогового агента) об отзыве налоговой отчетности",
+      "Налоговое заявление налогоплательщика (налогового агента) об отзыве налоговой отчетности",
     icon: "snippets",
     url: "/007",
     icon_color: "#334ECD",
@@ -79,7 +79,7 @@ const data = [
   },
   {
     title:
-      "На возврат уплаченного подоходного налога из бюджета на основании международного договора об избежании двойного налогообложения",
+      "Налоговое заявление о приостановлении (продлении, возобновлении) представления налоговой отчетности",
     icon: "snippets",
     url: "/001",
     icon_color: "#E53131",
@@ -331,10 +331,10 @@ class App extends Component {
               type="info"
             ></Alert>
           </Row>
-          <Row type="flex" style={{justifyContent: "flex-end"}}>
+          <Row type="flex" style={{ justifyContent: "flex-end" }}>
             <Input.Search
               placeholder="Введите название"
-              style={{width: 300}}
+              style={{ width: 300 }}
               enterButton="Поиск"
               onSearch={value => console.log(value)}
             />

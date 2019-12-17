@@ -126,7 +126,7 @@ class ListStatements extends Component {
     super(props);
     this.state = {
       url:
-        "http://10.202.41.203:9020/tax-report/form-apps?page=0&size=10&userXin=781227450219",
+        "http://10.202.41.203:9020/tax-report/form-apps?page=0&size=90&userXin=781227450219",
       card_url: "http://10.202.41.203:9020/tax-report/form-apps/",
       results: {},
       startValue: null,

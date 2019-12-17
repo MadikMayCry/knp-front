@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Table, Button } from "antd";
 import { jsx, css } from "@emotion/core";
-import pdfMakeTable from "Utils/PdfMakeTable";
+import pdfMakeTable from "Utils/TaxPdfmake";
 
 const { Column } = Table;
 
