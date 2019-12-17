@@ -32,7 +32,6 @@ import ZeroZeroOneWrapper from "Pages/Applications/CreateForms/ZeroZeroOne";
 import ZeroZeroSevenWrapper from "Pages/Applications/CreateForms/ZeroZeroSeven";
 import Applications from "Pages/Applications";
 import FnoList from "Pages/FNO/journal";
-import pdfGenerate from "Pages/PDFGenerate";
 
 
 class App extends Component {
@@ -131,11 +130,6 @@ class App extends Component {
             exact
             path="/applications"
             render={props => <MainLayout {...props} component={Applications} />}
-          />
-          <Route
-            exact
-            path="/pdf-test"
-            render={props => <MainLayout {...props} component={pdfGenerate} />}
           />
         </Switch>
       </Router>
