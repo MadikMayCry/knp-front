@@ -261,7 +261,7 @@ const FOPdfMake = async id => {
           bold: true,
           margin: [60, 0, 0, 0]
         },
-        { text: "O=_ORGANIZATION, OU=BIN ORGANIZATION_UNIT", alignment: "left" }
+        { text: "O= КГД МФ РК, OU=BIN141040004756", alignment: "left" }
       ]
     },
     styles: {

@@ -150,6 +150,16 @@ const pdfMakeTable = async id => {
       body,
       "\n"
     ],
+    footer: {
+      columns: [
+        {
+          text: "Подпись прикладного сервера:",
+          bold: true,
+          margin: [60, 0, 0, 0]
+        },
+        { text: "O= КГД МФ РК, OU=BIN141040004756", alignment: "left" }
+      ]
+    },
     styles: {
       header: {
         bold: true,

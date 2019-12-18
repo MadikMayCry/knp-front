@@ -53,6 +53,13 @@ class Calendar extends Component {
       let tdy = moment(todaysdate.format("YYYY-MM-DD"));
 
       let isToday = moment(tdy).isSame(eventdate.format("YYYY-MM-DD"));
+      let eventClassName = "";
+
+      if (difference >= 8) {
+        eventClassName = "ant-btn-primary";
+      } else if (difference >= 0 && difference < 8 && !isToday) {
+        eventClassName = calendarClasses[difference];
+      }
 
       if (events.length) {
         return (
@@ -61,22 +68,19 @@ class Calendar extends Component {
             title={events.map(item => (
               <>
                 <div className="event-row">
-                  <Icon type={iconType[item.type]} /> {"   "}
+                  <Icon
+                    type={
+                      iconType[item.type] ? iconType[item.type] : iconType[1]
+                    }
+                  />{" "}
+                  {"   "}
                   {item.title}
                 </div>
               </>
             ))}
             placement="bottom"
           >
-            <Button
-              shape="circle"
-              size="default"
-              className={
-                difference >= 0 && difference < 8 && !isToday
-                  ? calendarClasses[difference]
-                  : "ant-btn-primary"
-              }
-            >
+            <Button shape="circle" size="default" className={eventClassName}>
               {parseInt(date.slice(8, 10), 10)}
             </Button>
           </Tooltip>
@@ -102,7 +106,7 @@ class Calendar extends Component {
             value={this.state.currentMonth.prev}
             onClick={this.changeMonth}
           >
-            <Icon type="left-square" />
+            <Icon type="left" />
             {calendarNames[this.state.currentMonth.prev]
               ? calendarNames[this.state.currentMonth.prev] +
                 " " +
@@ -125,7 +129,7 @@ class Calendar extends Component {
                 " " +
                 this.state.currentMonth.nextYear
               : "Нет данных"}
-            <Icon type="right-square" />
+            <Icon type="right" />
           </Button>
         </Row>
         <Divider style={{ marginTop: 10 }} />
