@@ -220,6 +220,18 @@ a {
   color: #3b3e48;
 }
 
+.teal-btn{
+  background-color: #36cfc9;
+  border-color: #36cfc9;
+  color: #fff;
+}
+
+.teal-btn:hover{
+  background-color: #5cdbd3;
+  border-color: #5cdbd3;
+  color: #fff;
+}
+
 .yellow-btn:hover {
   background-color: #fadb14;
   border-color: #ffd232;

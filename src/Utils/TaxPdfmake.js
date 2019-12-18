@@ -75,7 +75,7 @@ const pdfMakeTable = async id => {
   if (formAppType == 2) {
     result = reovocationSolutionResults[solutionResult];
     body = [
-      { text: result, fontSize: 14 },
+      { text: result},
       { text: formAppRegistrationNumber, style: "underlined" }
     ];
   }

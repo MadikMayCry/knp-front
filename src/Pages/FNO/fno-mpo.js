@@ -26,7 +26,7 @@ import {
 const { Content } = Layout;
 const { Option } = Select;
 
-const title = "Журнал ФНО МПО";
+const title = "";
 
 const halfYearData = ["Первое полугодие", "Второе полугодие"];
 

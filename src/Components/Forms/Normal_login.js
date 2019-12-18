@@ -92,7 +92,7 @@ class NormalLoginForm extends React.Component {
           >
             Войти
           </Button>
-          <Button className="yellow-btn">Войти по ЭЦП</Button>
+          <Button className="teal-btn">Войти по ЭЦП</Button>
         </div>
       </Form>
     );
