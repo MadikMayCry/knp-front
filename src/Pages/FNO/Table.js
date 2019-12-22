@@ -1,8 +1,7 @@
 import React from "react";
 import { Table, Button } from "antd";
 import { jsx, css } from "@emotion/core";
-import pdfGenerator from "Utils/FOPdfMake";
-
+import { TaxPdfMake } from "Utils/NotificationPdfMake";
 const { Column } = Table;
 
 const body = css({
@@ -16,7 +15,7 @@ const _exportPdfTable = e => {
   // change this number to generate more or less rows of data
   let id = e.target.name;
 
-  pdfGenerator(id);
+  TaxPdfMake(id);
 };
 
 const ListTable = props => {

@@ -49,19 +49,43 @@ const formType = {
   5: "Ликвидационная"
 };
 
-const data = [
+const dataRandom = [
   {
-    title: "ФНО номер 910.00",
-    desc:
-      "Упрощеная декларация для субъектов малого бизнеса",
-    icon: "snippets",
-    url: "/declaration",
     icon_color: "#EFC224",
     style: {
       background: "rgba(239, 194, 36, 0.2)"
     }
+  },
+  {
+    icon_color: "#334ECD",
+    style: {
+      background: "rgba(51, 78, 205, 0.2)"
+    }
+  },
+  {
+    icon_color: "#E53131",
+    style: {
+      background: "rgba(229, 49, 49, 0.2)"
+    }
+  },
+  {
+    icon_color: "#2CCE1E",
+    style: {
+      background: "rgba(44, 206, 30, 0.2)"
+    }
   }
 ];
+
+const years = () => {
+  const years = [];
+  const dateStart = moment().subtract(20, "y");
+  const dateEnd = moment();
+  while (dateEnd.diff(dateStart, "years") >= 0) {
+    years.push(dateStart.format("YYYY"));
+    dateStart.add(1, "year");
+  }
+  return years;
+};
 
 class App extends Component {
   constructor(props) {
@@ -74,6 +98,28 @@ class App extends Component {
       url: `http://10.202.41.203:9020/tax-report/tax-forms?userXin=560319301503`
     };
   }
+
+  renderList = item => {
+    let temp = dataRandom[Math.floor(Math.random() * dataRandom.length)];
+    return (
+      <List.Item>
+        <List.Item.Meta
+          avatar={
+            <Avatar style={temp.style}>
+              <Icon
+                type="snippets"
+                style={{
+                  color: `${temp.icon_color}`
+                }}
+              />
+            </Avatar>
+          }
+          title={<a href={item.url}>ФНО номер {item.code}</a>}
+          description={item.Title}
+        />
+      </List.Item>
+    );
+  };
 
   optionFieldsJson = item => {
     return item.map(item => {
@@ -100,7 +146,7 @@ class App extends Component {
                       <Icon type="home" />
                     </Breadcrumb.Item>
                     <Breadcrumb.Item>
-                      Журнал Форм налоговой отчетности
+                      Список форм налоговой отчетности
                     </Breadcrumb.Item>
                   </Breadcrumb>
                 </>
@@ -108,28 +154,38 @@ class App extends Component {
               type="info"
             ></Alert>
           </Row>
+          <Form layout="inline">
+            <Row>
+              <Form.Item>
+                <Select
+                  style={{ width: "300px" }}
+                  placeholder="Выберите Год"
+                  allowClear
+                  defaultValue="2019"
+                >
+                  {years().map(item => (
+                    <Option key={item} value={item}>
+                      {item}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+              <Form.Item>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                >
+                  Найти по году
+                </Button>
+              </Form.Item>
+            </Row>
+          </Form>
+
           <Row>
             <List
               itemLayout="horizontal"
-              dataSource={data}
-              renderItem={item => (
-                <List.Item>
-                  <List.Item.Meta
-                    avatar={
-                      <Avatar style={item.style}>
-                        <Icon
-                          type={item.icon}
-                          style={{
-                            color: `${item.icon_color}`
-                          }}
-                        />
-                      </Avatar>
-                    }
-                    title={<a href={item.url}>{item.title}</a>}
-                    description={item.desc}
-                  />
-                </List.Item>
-              )}
+              dataSource={fno_list}
+              renderItem={this.renderList}
             />
           </Row>
         </Content>

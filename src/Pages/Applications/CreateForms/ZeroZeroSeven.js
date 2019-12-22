@@ -104,15 +104,15 @@ class ZeroZeroSeven extends Component {
     this.state = {
       authedUser: {
         taxPayerXin: "560319301503",
-        name: "Жана",
-        lastname: "Канафина",
-        patronymic: "Аманбаевна"
+        name: "Муратали",
+        lastname: "Бердибаев",
+        patronymic: "Есаналиевич"
       },
       ogd_all: undefined,
       reqbody: {},
       isFetching: false,
       data: [],
-      url: `http://10.202.41.203:9020/tax-report/form-apps/revocation?userXin=781227450219`
+      url: `http://10.202.41.203:9020/tax-report/form-apps/revocation?userXin=560319301503`
     };
   }
 

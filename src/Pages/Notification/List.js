@@ -3,11 +3,9 @@ import axios from "axios";
 import moment from "moment";
 import Table from "./Table";
 import CabinetHeader from "Layout/CabinetHeader";
-import ogd_list from "ogd_list.json";
-import fno_list from "fno_list.json";
-import monthList from "month_list.json";
 import {
   Row,
+  Input,
   Col,
   DatePicker,
   Form,
@@ -21,6 +19,12 @@ import {
 
 const { Content } = Layout;
 const { Option } = Select;
+
+const notificationTypeList = {
+  1: "Уведомление о принятии/не принятии формы налоговой отчетности",
+  2: "Уведомление о принятии/не принятии налогового заявления на приостановление",
+  3: "Уведомление о принятии/не принятии налогового заявления на отзыв"
+};
 
 const title = "";
 
@@ -36,6 +40,16 @@ const years = () => {
   }
   return years;
 };
+
+const datesList = [
+  "acceptanceEndDate",
+  "acceptanceStartDate",
+  "notificationEndDate",
+  "notificationStartDate",
+  "notificationType",
+  "receiveEndDate",
+  "receiveStartDate"
+];
 
 const quarterData = {
   "Первое полугодие": ["Первый квартал", "Второй квартал"],
@@ -59,15 +73,21 @@ const formType = {
   5: "Ликвидационная"
 };
 
-class FNO extends Component {
+class Notification extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      authedUser: {
+        taxPayerXin: "560319301503",
+        name: "Муратали",
+        lastname: "Бердибаев",
+        patronymic: "Есаналиевич"
+      },
       isFetching: false,
       data: [],
       halfYears: quarterData[halfYearData[0]],
       quarter: quarterData[halfYearData[0]][0],
-      url: `http://10.202.41.203:9020/tax-report/tax-forms?userXin=560319301503`
+      url: `http://10.202.41.203:9020/tax-report/notifications?size=50&userXin=560319301503`
     };
   }
 
@@ -97,18 +117,14 @@ class FNO extends Component {
   submitAuditJournal = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      if (!err) {
-        const data = {
-          ...values,
-          sendStartDate: values["sendStartDate"]
-            ? values["sendStartDate"].format("YYYY-MM-DD")
-            : undefined,
-          sendEndDate: values["sendEndDate"]
-            ? values["sendEndDate"].format("YYYY-MM-DD")
-            : undefined
-        };
-        console.log(data);
+      const data = values;
 
+      datesList.map(item => {
+        if (data[item]) {
+          data[item] = values[item].format("YYYY-MM-DD");
+        }
+      });
+      if (!err) {
         this.formData(data);
       }
     });
@@ -159,13 +175,13 @@ class FNO extends Component {
   };
 
   render() {
-    const { halfYears } = this.state;
     const {
       getFieldDecorator,
       getFieldsError,
       getFieldError,
       isFieldTouched
     } = this.props.form;
+    const authed = this.state.authedUser;
     return (
       <>
         <CabinetHeader title={title} />
@@ -180,7 +196,7 @@ class FNO extends Component {
                       <Icon type="home" />
                     </Breadcrumb.Item>
                     <Breadcrumb.Item>
-                      Журнал форм налоговой отчетности
+                      Журнал уведомлений
                     </Breadcrumb.Item>
                   </Breadcrumb>
                 </>
@@ -191,152 +207,37 @@ class FNO extends Component {
           <Row>
             <Form onSubmit={this.submitAuditJournal}>
               <Row gutter={20}>
+                <Col span={6} style={{ display: "none" }}>
+                  <Form.Item label="ИИН налогоплательщика">
+                    {getFieldDecorator("taxPayerXin", {
+                      initialValue: authed.taxPayerXin
+                    })(<Input readOnly style={{ width: "100%" }} />)}
+                  </Form.Item>
+                </Col>
                 <Col span={6}>
-                  <Form.Item label="Код ОГД">
-                    {getFieldDecorator("taxOrgCode")(
-                      <Select
-                        style={{ width: "100%" }}
-                        placeholder="Выберите ОГД"
-                        allowClear
-                        showSearch
-                        optionFilterProp="children"
-                        showSearch
-                      >
-                        {this.optionFieldsJson(ogd_list)}
-                      </Select>
+                  <Form.Item label="Номер уведомления">
+                    {getFieldDecorator(
+                      "notificationNumber",
+                      {}
+                    )(<Input style={{ width: "100%" }} />)}
+                  </Form.Item>
+                </Col>
+                <Col span={6}>
+                  <Form.Item label="Дата поступления с">
+                    {getFieldDecorator("acceptanceStartDate")(
+                      <DatePicker
+                        format="YYYY-MM-DD"
+                        showTime
+                        style={{
+                          width: "100%"
+                        }}
+                        placeholder="Выберите дату"
+                      />
                     )}
                   </Form.Item>
                 </Col>
                 <Col span={6}>
-                  <Form.Item label="Код ФНО">
-                    {getFieldDecorator("formCode")(
-                      <Select
-                        style={{ width: "100%" }}
-                        placeholder="Выберите ФНО"
-                        optionFilterProp="children"
-                        allowClear
-                        showSearch
-                      >
-                        {this.optionFieldsJson(fno_list)}
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={6}>
-                  <Form.Item label="Вид ФНО">
-                    {getFieldDecorator("formType")(
-                      <Select
-                        style={{ width: "100%" }}
-                        placeholder="Выберите вид ФНО"
-                        optionFilterProp="children"
-                        allowClear
-                        showSearch
-                      >
-                        {Object.entries(formType)
-                          .sort(([a], [b]) => a - b)
-                          .map(([key, value]) => (
-                            <Option value={key} name={key}>
-                              {value}
-                            </Option>
-                          ))}
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={6}>
-                  <Form.Item label="Статус ФНО">
-                    {getFieldDecorator("appStatuses")(
-                      <Select
-                        mode="multiple"
-                        style={{ width: "100%" }}
-                        placeholder="Выберите вид ФНО"
-                        optionFilterProp="children"
-                        allowClear
-                        showSearch
-                      >
-                        {Object.entries(appStatuses)
-                          .sort(([a], [b]) => a - b)
-                          .map(([key, value]) => (
-                            <Option value={key} name={key}>
-                              {value}
-                            </Option>
-                          ))}
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={6}>
-                  <Form.Item label="Год">
-                    {getFieldDecorator("yearField")(
-                      <Select
-                        style={{ width: "100%" }}
-                        placeholder="Выберите Год"
-                        allowClear
-                      >
-                        {years().map(item => (
-                          <Option key={item} value={item}>
-                            {item}
-                          </Option>
-                        ))}
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={6}>
-                  <Form.Item label="Полугодие">
-                    {getFieldDecorator("halfYear")(
-                      <Select
-                        style={{ width: "100%" }}
-                        placeholder="Выберите Полугодие"
-                        onChange={this.handlehalfYearChange}
-                      >
-                        {halfYearData.map(halfYear => (
-                          <Option key={halfYear}>{halfYear}</Option>
-                        ))}
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={6}>
-                  <Form.Item label="Квартал">
-                    {getFieldDecorator("quarter")(
-                      <Select
-                        style={{ width: "100%" }}
-                        placeholder="Выберите Квартал"
-                        onChange={this.onquarterChange}
-                        value={this.state.quarter}
-                        allowClear
-                      >
-                        {halfYears.map(item => (
-                          <Option key={item}>{item}</Option>
-                        ))}
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={6}>
-                  <Form.Item label="Месяц">
-                    {getFieldDecorator("month")(
-                      <Select
-                        style={{ width: "100%" }}
-                        placeholder="Выберите месяц"
-                        name="month"
-                        showSearch
-                        allowClear
-                      >
-                        {Object.entries(monthList)
-                          .sort(([a], [b]) => a - b)
-                          .map(([key, value]) => (
-                            <Option value={key} name={key}>
-                              {value}
-                            </Option>
-                          ))}
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={6}>
-                  <Form.Item label="Дата подачи ФНО">
+                  <Form.Item label="Дата поступления по">
                     {getFieldDecorator("sendStartDate")(
                       <DatePicker
                         showTime
@@ -344,22 +245,81 @@ class FNO extends Component {
                         style={{
                           width: "100%"
                         }}
-                        placeholder="Период с"
+                        placeholder="Выберите дату"
                       />
                     )}
                   </Form.Item>
                 </Col>
                 <Col span={6}>
-                  <Form.Item label="Дата подачи ФНО">
-                    {getFieldDecorator("sendEndDate")(
+                  <Form.Item label="Дата уведомления с">
+                    {getFieldDecorator("notificationStartDate")(
                       <DatePicker
-                        format="YYYY-MM-DD"
                         showTime
+                        format="YYYY-MM-DD"
                         style={{
                           width: "100%"
                         }}
-                        placeholder="Период по"
+                        placeholder="Выберите дату"
                       />
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col span={6}>
+                  <Form.Item label="Дата уведомления по">
+                    {getFieldDecorator("notificationEndDate")(
+                      <DatePicker
+                        showTime
+                        format="YYYY-MM-DD"
+                        style={{
+                          width: "100%"
+                        }}
+                        placeholder="Выберите дату"
+                      />
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col span={6}>
+                  <Form.Item label="Дата ознакомления с">
+                    {getFieldDecorator("receiveStartDate")(
+                      <DatePicker
+                        showTime
+                        format="YYYY-MM-DD"
+                        style={{
+                          width: "100%"
+                        }}
+                        placeholder="Выберите дату"
+                      />
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col span={6}>
+                  <Form.Item label="Дата ознакомления по">
+                    {getFieldDecorator("receiveEndDate")(
+                      <DatePicker
+                        showTime
+                        format="YYYY-MM-DD"
+                        style={{
+                          width: "100%"
+                        }}
+                        placeholder="Выберите дату"
+                      />
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col span={6}>
+                  <Form.Item label="Наименование уведомления">
+                    {getFieldDecorator("yearField")(
+                      <Select
+                        style={{ width: "100%" }}
+                        placeholder="Выберите Год"
+                        allowClear
+                      >
+                        {Object.entries(notificationTypeList).map(([key,value]) => (
+                          <Option key={value} value={value}>
+                            {value}
+                          </Option>
+                        ))}
+                      </Select>
                     )}
                   </Form.Item>
                 </Col>
@@ -405,6 +365,6 @@ class FNO extends Component {
     );
   }
 }
-const WrapperFNO = Form.create({ name: "fno_form" })(FNO);
+const WrapperNotification = Form.create({ name: "fno_form" })(Notification);
 
-export default WrapperFNO;
+export default WrapperNotification;

@@ -323,7 +323,7 @@ class App extends Component {
                       <Icon type="home" />
                     </Breadcrumb.Item>
                     <Breadcrumb.Item>
-                      Журнал налоговых заявлений
+                      Список налоговых заявлений
                     </Breadcrumb.Item>
                   </Breadcrumb>
                 </>

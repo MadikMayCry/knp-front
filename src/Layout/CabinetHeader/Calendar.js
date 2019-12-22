@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import moment from "moment";
 import { Button, Row, Icon, Divider, Tooltip } from "antd";
 import calendarData from "./calendarData.json";
-
+import { BrowserRouter as Router, Link, withRouter } from "react-router-dom";
 const iconType = {
-  1: "calendar",
-  2: "user"
+  1: "file",
+  2: "dollar"
 };
 
 const calendarClasses = {
@@ -96,6 +96,17 @@ class Calendar extends Component {
   render() {
     return (
       <>
+        <Row>
+          <h5
+            style={{
+              textAlign: "center",
+              fontSize: 15,
+              marginBottom: 10
+            }}
+          >
+            Налоговый календарь
+          </h5>
+        </Row>
         <Row
           gutter={20}
           type="flex"
@@ -139,6 +150,11 @@ class Calendar extends Component {
           style={{ marginBottom: "10px", justifyContent: "space-between" }}
         >
           {this.calendarsList()}
+        </Row>
+        <Row gutter={20} style={{ textAlign: "right" }}>
+          <Link to="calendar">
+            <Button size="small">Расширенный календарь</Button>
+          </Link>
         </Row>
       </>
     );

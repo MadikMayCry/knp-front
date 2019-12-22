@@ -38,6 +38,7 @@ class MenuList extends Component {
       );
     });
   }
+
   render() {
     return <Menu mode="inline">{this.handler(this.props.list.data)}</Menu>;
   }

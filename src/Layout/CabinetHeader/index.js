@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import { Redirect } from "react-router-dom";
 import {
   Menu,
   Dropdown,
@@ -8,6 +8,7 @@ import {
   Layout,
   Button,
   Select,
+  Input,
   Row,
   Divider,
   Tooltip,
@@ -24,49 +25,66 @@ const menu = (
   <Menu>
     <Menu.Item key="1">
       <Icon type="user" />
-      1st menu item
+      Ссылка на первый ресурс
     </Menu.Item>
     <Menu.Item key="2">
       <Icon type="user" />
-      2nd menu item
+      Ссылка на второй ресурс
     </Menu.Item>
     <Menu.Item key="3">
       <Icon type="user" />
-      3rd item
+      Ссылка на третий ресурс
     </Menu.Item>
   </Menu>
 );
 
 class CabinetHeader extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      redirect: false
+    };
+  }
+  handleSearch = e => {
+    if (e) {
+      this.setState({
+        redirect: true
+      });
+    }
+
+    // this.router.push(`'/search//some-action'`);
+    // if (this.state.redirect) {
+    //   console.log("redirecting");
+
+    // }
+  };
+
+  renderRedirect = () => {
+    if (this.state.redirect) {
+
+      return <Redirect to="/search-results" />;
+    }
+  };
   render() {
     const { title } = this.props;
     return (
       <>
+        {this.renderRedirect()}
         <Header
-          style={{ background: "#F0F3F9", padding: "0px 50px" }}
+          style={{ background: "#F0F3F9", margin: "0px 16px", padding: 0 }}
           className="cabinet-header d-flex jc-fl-end"
         >
-          <h1 className="page-title" style={{ marginRight: "auto" }}>
+          {/* <h1 className="page-title" style={{ marginRight: "auto" }}>
             {title}
-          </h1>
+          </h1> */}
+          <Input.Search
+            placeholder="Введите запрос"
+            enterButton="Поиск"
+            style={{width: 350, marginRight: "auto"}}
+            onSearch={this.handleSearch}
+
+          />
           <img style={{ height: "30px", marginRight: 10 }} src={bg} />
-          <Button style={{ marginRight: "10px" }}>
-            <Icon type="calendar" />
-          </Button>
-          {/* <Select
-          showSearch
-          style={{ width: 200, margin: "0 10px" }}
-          placeholder="Полезные ссылки"
-          optionFilterProp="children"
-          filterOption={(input, option) =>
-            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >=
-            0
-          }
-        >
-          <Option value="jack">Ссылка на первый сайт</Option>
-          <Option value="lucy">Ссылка на второй сайт</Option>
-          <Option value="tom">Ссылка на третий сайт</Option>
-        </Select> */}
           <Dropdown overlay={menu}>
             <Button>
               <Icon type="link" />
@@ -76,8 +94,8 @@ class CabinetHeader extends Component {
           <div className="logo-title-wrapper" style={{ margin: "0 10px" }}>
             <Avatar style={{ backgroundColor: "#87d068" }} icon="user" />
             <div className="logo-title">
-              <div className="title">Канафина Ж.А.</div>
-              <div className="sub-title">ИИН 781227450219</div>
+              <div className="title">Бердибаев М.Е.</div>
+              <div className="sub-title">ИИН 560319301503</div>
             </div>
           </div>
           <Button type="link">

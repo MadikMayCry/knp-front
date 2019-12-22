@@ -32,7 +32,9 @@ import ZeroZeroOneWrapper from "Pages/Applications/CreateForms/ZeroZeroOne";
 import ZeroZeroSevenWrapper from "Pages/Applications/CreateForms/ZeroZeroSeven";
 import Applications from "Pages/Applications";
 import FnoList from "Pages/FNO/journal";
-
+import WrapperNotification from "Pages/Notification/List";
+import SearchResults from "Pages/SearchResults";
+import Calendar from "Pages/Calendar";
 
 class App extends Component {
   constructor(props) {
@@ -131,6 +133,28 @@ class App extends Component {
             path="/applications"
             render={props => <MainLayout {...props} component={Applications} />}
           />
+          <Route
+            exact
+            path="/notification-list"
+            render={props => (
+              <MainLayout {...props} component={WrapperNotification} />
+            )}
+          />
+          <Route
+            exact
+            path="/search-results"
+            render={props => (
+              <MainLayout {...props} component={SearchResults} />
+            )}
+          />
+          <Route
+            exact
+            path="/calendar"
+            render={props => (
+              <MainLayout {...props} component={Calendar} />
+            )}
+          />
+          
         </Switch>
       </Router>
     );

@@ -1,13 +1,16 @@
 import React, { useState, useEffect, Component } from "react";
+import { FO810PdfMake } from "Utils/NotificationPdfMake";
 function Example() {
   const [count, setCount] = useState(0);
-  useEffect(() => {document.title = `Вы нажали ${count} раз`});
+
+  const qwe = () => {
+    FO810PdfMake();
+  };
+
   return (
     <div>
-      <p>Вы нажали {count} раз</p>
-      <button onClick={() => setCount(count + 1)}>Нажми на меня</button>
+      <button onClick={qwe}>Нажми на меня</button>
     </div>
   );
 }
 export default Example;
-

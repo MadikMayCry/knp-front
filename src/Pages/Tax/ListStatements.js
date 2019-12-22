@@ -23,7 +23,7 @@ import axios from "axios";
 const { Content } = Layout;
 const { Option } = Select;
 
-const title = "Журнал Налоговых заявлений";
+const title = "";
 
 const datesList = [
   "receiveEndDate",
@@ -350,9 +350,8 @@ class ListStatements extends Component {
                     </Breadcrumb.Item>
                     <Breadcrumb.Item href="">
                       <Icon type="user" />
-                      <span>Список налоговых заявлений</span>
+                      <span>Журнал налоговых заявлений</span>
                     </Breadcrumb.Item>
-                    <Breadcrumb.Item>Налоговое заявление 001</Breadcrumb.Item>
                   </Breadcrumb>
                 </>
               }

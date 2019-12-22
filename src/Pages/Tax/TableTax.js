@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Table, Button } from "antd";
 import { jsx, css } from "@emotion/core";
-import pdfMakeTable from "Utils/TaxPdfmake";
+import { FOPdfMake } from "Utils/NotificationPdfMake";
 
 const { Column } = Table;
 
@@ -16,7 +16,7 @@ const _exportPdfTable = e => {
   // change this number to generate more or less rows of data
   let id = e.target.name;
 
-  pdfMakeTable(id);
+  FOPdfMake(id);
 };
 
 const TableMpo = props => {
