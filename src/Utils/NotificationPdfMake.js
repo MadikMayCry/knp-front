@@ -43,11 +43,26 @@ let taxPayerXinTitle =
 let taxPayerNameTitle =
   "Наименование налогоплательщика/фамилия, имя, отчество (при его наличии)";
 
-const getData = async id => {
-  let resp = await axios.get(
-    `http://10.202.41.203:9020/tax-report/notifications/${id}`
-  );
-  return resp.data;
+const getData = async (id, from) => {
+  console.log(from);
+
+  if (from == "tax") {
+    let resp = await axios.get(
+      `http://10.202.41.203:9020/tax-report/form-apps/${id}/notification`
+    );
+    return resp.data;
+  }
+  if (from == "fno") {
+    let resp = await axios.get(
+      `http://10.202.41.203:9020/tax-report/tax-forms/${id}/notification`
+    );
+    return resp.data;
+  } else {
+    let resp = await axios.get(
+      `http://10.202.41.203:9020/tax-report/notifications/${id}`
+    );
+    return resp.data;
+  }
 };
 
 const getBase64ImageFromURL = url => {
@@ -75,8 +90,8 @@ const getBase64ImageFromURL = url => {
   });
 };
 
-export const FOPdfMake = async id => {
-  let temp = await getData(id);
+export const FOPdfMake = async (id, from) => {
+  let temp = await getData(id, from);
 
   let {
     taxPayerXin,
@@ -292,8 +307,8 @@ export const FOPdfMake = async id => {
   pdfMake.createPdf(documentDefinition).open();
 };
 
-export const TaxPdfMake = async id => {
-  let temp = await getData(id);
+export const TaxPdfMake = async (id, from) => {
+  let temp = await getData(id, from);
   console.log(temp);
 
   let {
@@ -511,11 +526,17 @@ export const FO810PdfMake = async id => {
               "наличие налоговой задолженности на дату подачи заявления"
             ],
             [
-              { text: "Дата начала периода приостановления", style: "tableHeader" },
+              {
+                text: "Дата начала периода приостановления",
+                style: "tableHeader"
+              },
               "04.12.2019"
             ],
             [
-              { text: "Дата окончания периода приостановления", style: "tableHeader" },
+              {
+                text: "Дата окончания периода приостановления",
+                style: "tableHeader"
+              },
               "31.12.2020"
             ]
           ]

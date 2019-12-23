@@ -35,6 +35,8 @@ import FnoList from "Pages/FNO/journal";
 import WrapperNotification from "Pages/Notification/List";
 import SearchResults from "Pages/SearchResults";
 import Calendar from "Pages/Calendar";
+import EightSevenOne from "Pages/Declaration/eightsevenone";
+
 
 class App extends Component {
   constructor(props) {
@@ -152,6 +154,13 @@ class App extends Component {
             path="/calendar"
             render={props => (
               <MainLayout {...props} component={Calendar} />
+            )}
+          />
+          <Route
+            exact
+            path="/870-declaration"
+            render={props => (
+              <MainLayout {...props} component={EightSevenOne} />
             )}
           />
           
