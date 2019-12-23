@@ -26,6 +26,7 @@ import {
 
 const { Content } = Layout;
 const { Option } = Select;
+const { Paragraph } = Typography;
 
 const title = "";
 
@@ -155,6 +156,7 @@ class Declaration extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      data: {},
       authedUser: {
         taxPayerXin: "560319301503",
         name: "Муратали",
@@ -211,6 +213,7 @@ class Declaration extends Component {
   };
 
   componentDidMount(props) {
+    this.setState({ data: JSON.parse(localStorage.getItem("myData")) });
     this.getOgd();
   }
 
@@ -322,7 +325,30 @@ class Declaration extends Component {
     });
   };
 
+  onChange = async str => {
+    await localStorage.setItem(
+      "myData",
+      JSON.stringify({
+        text1: str,
+        text2: this.state.data.text2
+      })
+    );
+    this.setState({ data: JSON.parse(localStorage.getItem("myData")) });
+  };
+  onChange2 = async str => {
+    await localStorage.setItem(
+      "myData",
+      JSON.stringify({
+        text1: this.state.data.text1,
+        text2: str
+      })
+    );
+    this.setState({ data: JSON.parse(localStorage.getItem("myData")) });
+  };
+
   render() {
+    const ddd = this.state.data.text1;
+    debugger;
     const {
       getFieldDecorator,
       getFieldsError,
@@ -354,7 +380,9 @@ class Declaration extends Component {
           </Row>
           <Row>
             <Typography.Title level={4}>
-              Декларация по плате за эмиссии в окружающую среду (Форма 870.00)
+              <Paragraph editable={{ onChange: this.onChange }}>
+                {this.state.data.text1}
+              </Paragraph>
             </Typography.Title>
             <p></p>
             <Alert
@@ -447,7 +475,7 @@ class Declaration extends Component {
                         )}
                       </Form.Item>
                     </Col> */}
-                    <Col span={12} >
+                    <Col span={12}>
                       <Form.Item label="Наименование налогоплательщика">
                         {getFieldDecorator("taxPayerName", {
                           initialValue: `${authed.name} ${authed.lastname} ${authed.patronymic}`
@@ -763,7 +791,9 @@ class Declaration extends Component {
               </Collapse>
               <p></p>
               <Typography.Title level={4}>
-                Плата за эмиссию в окружающую среду (Приложение к декларации)
+                <Paragraph editable={{ onChange: this.onChange2 }}>
+                  {this.state.data.text2}
+                </Paragraph>
               </Typography.Title>
 
               <Collapse

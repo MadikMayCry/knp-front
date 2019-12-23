@@ -24,6 +24,12 @@ class NormalLoginForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err && values.xin == 560319301503 && values.password == "admin") {
+        const data = {
+          text1:
+            "Декларация по плате за эмиссии в окружающую среду (Форма 870.00)",
+          text2: "Плата за эмиссию в окружающую среду (Приложение к декларации)"
+        };
+        localStorage.setItem("myData", JSON.stringify(data));
         this.setState({
           redirect: true
         });

@@ -148,7 +148,7 @@ class FNOMPO extends Component {
     let { results } = this.state;
     if (results) {
       console.log(results);
-      debugger;
+      
       return (
         <Descriptions bordered size="middle" column={1}>
           {Object.entries(results).map(([key, value]) =>
