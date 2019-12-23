@@ -44,7 +44,7 @@ const sections = {
   9: "Раздел. Сведения об установленных ставках для исчисления платы за эмиссии в окружающую среду"
 };
 
-const environmentalUnits = {
+const environmentalUnit = {
   1: "Тонна",
   2: "Кг",
   3: "гБк",
@@ -105,11 +105,6 @@ const years = () => {
   return years;
 };
 
-const quarterData = {
-  "Первое полугодие": ["Первый квартал", "Второй квартал"],
-  "Второе полугодие": ["Третий квартал", "Четвертый квартал"]
-};
-
 const radioStyle = {
   display: "block",
   height: "30px",
@@ -125,7 +120,7 @@ const formType = {
   5: "Ликвидационная"
 };
 
-const natureUsage = {
+const environmentalManagementType = {
   1: "Выбросы загрязняющих веществ от стационарных источников",
   2: "Выбросы загрязняющих веществ от сжигания попутного или природного газа в факелах",
   3: "Выбросы загрязняющих веществ в атмосферный воздух от передвижных источников",
@@ -138,7 +133,10 @@ const datesList = [
   "notificationDate",
   "sendDate",
   "postalStampDate",
-  "receiveDate"
+  "receiveDate",
+  "permitIssueDate",
+  "permitValidityEndDate",
+  "permitValidityStartDate"
 ];
 
 const currencyCode = {
@@ -231,8 +229,8 @@ class Declaration extends Component {
 
   async sendPostsAsync(body) {
     try {
-      console.log(body);
-      console.log(typeof body);
+      // console.log(body);
+      // console.log(typeof body);
       axios
         .post(this.state.url, body)
         .then(response => this.succeedForm())
@@ -266,8 +264,9 @@ class Declaration extends Component {
       if (!err) {
         console.log(values);
 
-        this.formData(data);
+        // this.formData(data);
       }
+      this.formData(data);
     });
   };
 
@@ -275,11 +274,13 @@ class Declaration extends Component {
     let temp = {
       taxFormCells: []
     };
+    console.log("data");
     console.log(data);
 
     Object.entries(data).map(item => {
       if (item[1]) {
-        if (typeof item[1] == "object") {
+        if(item[1]==""){}
+        else if (typeof item[1] == "object") {
           temp.taxFormCells = [
             ...temp.taxFormCells,
             {
@@ -307,12 +308,6 @@ class Declaration extends Component {
 
   handleReset = () => {
     this.props.form.resetFields();
-  };
-
-  onquarterChange = value => {
-    this.setState({
-      quarter: value
-    });
   };
 
   optionFieldsJson = item => {
@@ -568,7 +563,6 @@ class Declaration extends Component {
                           <Select
                             style={{ width: "100%" }}
                             placeholder="Выберите Код"
-                            onChange={this.onquarterChange}
                             allowClear
                           >
                             {Object.entries(currencyCode)
@@ -582,7 +576,7 @@ class Declaration extends Component {
                         )}
                       </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    {/* <Col span={6}>
                       <Form.Item label="Количество приложений">
                         {getFieldDecorator("appCount", {
                           rules: [{ required: true, message: "Введите данные" }]
@@ -600,7 +594,7 @@ class Declaration extends Component {
                           </Select>
                         )}
                       </Form.Item>
-                    </Col>
+                    </Col> */}
                   </Row>
                   <Row gutter={20}>
                     <Col span={6} style={{ display: "none" }}>
@@ -609,6 +603,13 @@ class Declaration extends Component {
                           initialValue: "4",
                           rules: [{ required: true, message: "Введите данные" }]
                         })(<Input />)}
+                      </Form.Item>
+                    </Col>
+                    <Col span={6} style={{ display: "none" }}>
+                      <Form.Item label="Форма">
+                        {getFieldDecorator("formCode", {
+                          initialValue: "870.00"
+                        })(<Input readOnly style={{ width: "100%" }} />)}
                       </Form.Item>
                     </Col>
                   </Row>
@@ -696,7 +697,7 @@ class Declaration extends Component {
                         )}
                       </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    {/* <Col span={6}>
                       <Form.Item label="Код ОГД по месту жительства">
                         {getFieldDecorator("residenceTaxOrgCode", {
                           rules: [{ required: true, message: "Введите данные" }]
@@ -718,7 +719,7 @@ class Declaration extends Component {
                           </Select>
                         )}
                       </Form.Item>
-                    </Col>
+                    </Col> */}
                   </Row>
                   <Row gutter={20}>
                     <Col span={6}>
@@ -803,13 +804,13 @@ class Declaration extends Component {
               >
                 <Collapse.Panel header={sections[1]} key="0">
                   <Row gutter={20}>
-                    <Col span={6}>
+                    {/* <Col span={6}>
                       <Form.Item label="ИИН налогоплательщика">
                         {getFieldDecorator("taxPayerXin", {
                           initialValue: authed.taxPayerXin
                         })(<Input readOnly style={{ width: "100%" }} />)}
                       </Form.Item>
-                    </Col>
+                    </Col> */}
                     <Col span={6}>
                       <Form.Item label="БИН налогоплательщика">
                         {getFieldDecorator(
@@ -836,7 +837,7 @@ class Declaration extends Component {
                         />
                       </Form.Item>
                     </Col> */}
-                    <Col span={6}>
+                    {/* <Col span={6}>
                       <Form.Item
                         label={
                           <Tooltip title="Период, за который предоставляется налоговая отчетность (год)">
@@ -896,13 +897,13 @@ class Declaration extends Component {
                           </Select>
                         )}
                       </Form.Item>
-                    </Col>
+                    </Col> */}
                   </Row>
                   <Row gutter={20}>
                     <Col span={6}>
                       <Form.Item label="№ Разрешения">
                         {getFieldDecorator(
-                          "permissionNumber",
+                          "permitNumber",
                           {}
                         )(
                           <Input
@@ -915,7 +916,7 @@ class Declaration extends Component {
                     <Col span={6}>
                       <Form.Item label="Дата выдачи">
                         {getFieldDecorator(
-                          "permissionDate",
+                          "permitIssueDate",
                           {}
                         )(
                           <DatePicker
@@ -930,6 +931,19 @@ class Declaration extends Component {
                       </Form.Item>
                     </Col>
                     <Col span={6}>
+                      <Form.Item label="Категория объектов">
+                        {getFieldDecorator(
+                          "permitObjectCategory",
+                          {}
+                        )(
+                          <Input
+                            style={{ width: "100%" }}
+                            placeholder="Введите данные"
+                          />
+                        )}
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
                       <Form.Item
                         label={
                           <Tooltip title="Срок действия с">
@@ -938,7 +952,7 @@ class Declaration extends Component {
                         }
                       >
                         {getFieldDecorator(
-                          "permissionStartDate",
+                          "permitValidityStartDate",
                           {}
                         )(
                           <DatePicker
@@ -961,7 +975,7 @@ class Declaration extends Component {
                         }
                       >
                         {getFieldDecorator(
-                          "permissionEndDate",
+                          "permitValidityEndDate",
                           {}
                         )(
                           <DatePicker
@@ -977,7 +991,7 @@ class Declaration extends Component {
                     </Col>
                     <Col span={12}>
                       <Form.Item label="Вид специального природопользования">
-                        {getFieldDecorator("natureUsage", {
+                        {getFieldDecorator("environmentalManagementType", {
                           rules: [{ required: true, message: "Введите данные" }]
                         })(
                           <Select
@@ -987,7 +1001,7 @@ class Declaration extends Component {
                             allowClear
                             showSearch
                           >
-                            {Object.entries(natureUsage)
+                            {Object.entries(environmentalManagementType)
                               .sort(([a], [b]) => a - b)
                               .map(([key, value]) => (
                                 <Option value={parseInt(key, 10)} name={key}>
@@ -1010,7 +1024,7 @@ class Declaration extends Component {
                     <Col span={6}>
                       <Form.Item label="Пункт">
                         {getFieldDecorator(
-                          "paragraph",
+                          "pollutantTypeItem",
                           {}
                         )(
                           <Input
@@ -1023,7 +1037,7 @@ class Declaration extends Component {
                     <Col span={6}>
                       <Form.Item label="Подпункт">
                         {getFieldDecorator(
-                          "subparagraph",
+                          "pollutantTypeSubItem",
                           {}
                         )(
                           <Input
@@ -1036,7 +1050,7 @@ class Declaration extends Component {
                     <Col span={6}>
                       <Form.Item label="Код опасных отходов согласно классификатору отходов">
                         {getFieldDecorator(
-                          "wasteCode",
+                          "pollutantTypeCode",
                           {}
                         )(
                           <Input
@@ -1049,7 +1063,7 @@ class Declaration extends Component {
                     <Col span={6}>
                       <Form.Item label="Единицы измерения природопользования">
                         {getFieldDecorator(
-                          "environmentalUnits",
+                          "environmentalUnit",
                           {}
                         )(
                           <Select
@@ -1059,7 +1073,7 @@ class Declaration extends Component {
                             allowClear
                             showSearch
                           >
-                            {Object.entries(environmentalUnits)
+                            {Object.entries(environmentalUnit)
                               .sort(([a], [b]) => a - b)
                               .map(([key, value]) => (
                                 <Option value={parseInt(key, 10)} name={key}>

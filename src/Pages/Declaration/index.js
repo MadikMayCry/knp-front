@@ -417,12 +417,6 @@ class Declaration extends Component {
     });
   };
 
-  onquarterChange = value => {
-    this.setState({
-      quarter: value
-    });
-  };
-
   optionFieldsJson = item => {
     return item.map(item => {
       return (
@@ -523,6 +517,13 @@ class Declaration extends Component {
                       <Form.Item label="Полное ФИО">
                         {getFieldDecorator("taxPayerName", {
                           initialValue: `${authed.name} ${authed.lastname} ${authed.patronymic}`
+                        })(<Input readOnly style={{ width: "100%" }} />)}
+                      </Form.Item>
+                    </Col>
+                    <Col span={6} style={{ display: "none" }}>
+                      <Form.Item label="Наименование ФНО">
+                        {getFieldDecorator("formCode", {
+                          initialValue: "910.00"
                         })(<Input readOnly style={{ width: "100%" }} />)}
                       </Form.Item>
                     </Col>
@@ -652,7 +653,6 @@ class Declaration extends Component {
                           <Select
                             style={{ width: "100%" }}
                             placeholder="Выберите Код"
-                            onChange={this.onquarterChange}
                             allowClear
                           >
                             {Object.entries(currencyCode)
