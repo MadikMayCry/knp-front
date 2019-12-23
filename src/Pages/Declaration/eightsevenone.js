@@ -279,8 +279,8 @@ class Declaration extends Component {
 
     Object.entries(data).map(item => {
       if (item[1]) {
-        if(item[1]==""){}
-        else if (typeof item[1] == "object") {
+        if (item[1] == "") {
+        } else if (typeof item[1] == "object") {
           temp.taxFormCells = [
             ...temp.taxFormCells,
             {
@@ -342,8 +342,6 @@ class Declaration extends Component {
   };
 
   render() {
-    const ddd = this.state.data.text1;
-    debugger;
     const {
       getFieldDecorator,
       getFieldsError,
