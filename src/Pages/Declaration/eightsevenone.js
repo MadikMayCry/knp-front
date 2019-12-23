@@ -374,7 +374,7 @@ class Declaration extends Component {
           <Row>
             <Typography.Title level={4}>
               <Paragraph editable={{ onChange: this.onChange }}>
-                {this.state.dataText.text1}
+                {this.state.dataText ? this.state.dataText.text1 : ""}
               </Paragraph>
             </Typography.Title>
             <p></p>
@@ -791,7 +791,7 @@ class Declaration extends Component {
               <p></p>
               <Typography.Title level={4}>
                 <Paragraph editable={{ onChange: this.onChange2 }}>
-                  {this.state.dataText.text2}
+                  {this.state.dataText ? this.state.dataText.text2 : ""}
                 </Paragraph>
               </Typography.Title>
 
