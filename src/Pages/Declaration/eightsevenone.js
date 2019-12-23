@@ -154,7 +154,7 @@ class Declaration extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: {},
+      dataText: {},
       authedUser: {
         taxPayerXin: "560319301503",
         name: "Муратали",
@@ -211,7 +211,7 @@ class Declaration extends Component {
   };
 
   componentDidMount(props) {
-    this.setState({ data: JSON.parse(localStorage.getItem("myData")) });
+    this.setState({ dataText: JSON.parse(localStorage.getItem("myData")) });
     this.getOgd();
   }
 
@@ -325,20 +325,20 @@ class Declaration extends Component {
       "myData",
       JSON.stringify({
         text1: str,
-        text2: this.state.data.text2
+        text2: this.state.dataText.text2
       })
     );
-    this.setState({ data: JSON.parse(localStorage.getItem("myData")) });
+    this.setState({ dataText: JSON.parse(localStorage.getItem("myData")) });
   };
   onChange2 = async str => {
     await localStorage.setItem(
       "myData",
       JSON.stringify({
-        text1: this.state.data.text1,
+        text1: this.state.dataText.text1,
         text2: str
       })
     );
-    this.setState({ data: JSON.parse(localStorage.getItem("myData")) });
+    this.setState({ dataText: JSON.parse(localStorage.getItem("myData")) });
   };
 
   render() {
@@ -374,7 +374,7 @@ class Declaration extends Component {
           <Row>
             <Typography.Title level={4}>
               <Paragraph editable={{ onChange: this.onChange }}>
-                {this.state.data.text1}
+                {this.state.dataText.text1}
               </Paragraph>
             </Typography.Title>
             <p></p>
@@ -791,7 +791,7 @@ class Declaration extends Component {
               <p></p>
               <Typography.Title level={4}>
                 <Paragraph editable={{ onChange: this.onChange2 }}>
-                  {this.state.data.text2}
+                  {this.state.dataText.text2}
                 </Paragraph>
               </Typography.Title>
 
