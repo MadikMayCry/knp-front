@@ -220,13 +220,13 @@ a {
   color: #3b3e48;
 }
 
-.teal-btn{
+.teal-btn {
   background-color: #36cfc9;
   border-color: #36cfc9;
   color: #fff;
 }
 
-.teal-btn:hover{
+.teal-btn:hover {
   background-color: #5cdbd3;
   border-color: #5cdbd3;
   color: #fff;
@@ -569,4 +569,75 @@ a {
 
 .chatbot-button img {
   margin: 0 auto;
+}
+
+.ant-carousel .slick-slide {
+  text-align: center;
+  /* background: #c0c0c0; */
+  overflow: hidden;
+  height: 500px;
+}
+
+.ant-carousel-vertical .slick-dots li.slick-active button {
+  background-color: #096dd9;
+}
+
+.ant-carousel-vertical .slick-dots li button {
+  background-color: #8c8c8c;
+}
+
+.ant-carousel-vertical .slick-dots-right {
+  right: -5px;
+}
+
+.some-title {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.ant-carousel .slick-slider .slick-list {
+  height: 450px !important;
+}
+
+.main-list.ant-list.ant-list-split {
+  height: 450px;
+}
+.mode-default span {
+  font-size: 10px;
+}
+
+.mode-large span {
+  font-size: 12px;
+}
+
+.mode-extraLarge span {
+  font-size: 14px;
+}
+
+.rc-footer-container {
+  padding: 40px 30px 0;
+}
+
+.rc-footer-columns {
+  /* justify-content: flex-start; */
+}
+
+.rc-footer-column {
+  margin-bottom: 40px;
+}
+
+.instructions-text {
+  text-indent: 15px;
+}
+
+.some-row {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.header-title{
+  font-weight: bold;
+  font-size: 14px;
 }

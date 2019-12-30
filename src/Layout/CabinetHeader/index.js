@@ -9,6 +9,7 @@ import {
   Button,
   Select,
   Input,
+  Radio,
   Row,
   Divider,
   Tooltip,
@@ -84,6 +85,22 @@ class CabinetHeader extends Component {
             onSearch={this.handleSearch}
 
           />
+          <Radio.Group
+              defaultValue="a"
+              buttonStyle="solid"
+              style={{ margin: "0 20px 0 0" }}
+              size="default"
+            >
+              <Radio.Button value="a" className="mode-default">
+                <span>A</span>
+              </Radio.Button>
+              <Radio.Button value="b" className="mode-large">
+                <span>A</span>
+              </Radio.Button>
+              <Radio.Button value="c" className="mode-extraLarge">
+                <span>A</span>
+              </Radio.Button>
+            </Radio.Group>
           <img style={{ height: "30px", marginRight: 10 }} src={bg} />
           <Dropdown overlay={menu}>
             <Button>

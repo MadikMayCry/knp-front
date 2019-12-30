@@ -75,21 +75,23 @@ const sectionTwo = [
 
 const sectionThree = [
   {
-    "01.001": "Остаток норматива на начало квартала",
-    "01.002": "Объем выкупленного норматива ",
-    "01.003": "Фактический объем эмиссий в пределах установленных нормативов",
-    "01.004": "Фактический объем эмиссий свех установленных нормативов",
-    "01.005": "Остаток норматива на конец квартала"
+    "taxFormAttachments.001": "Остаток норматива на начало квартала",
+    "taxFormAttachments.002": "Объем выкупленного норматива ",
+    "taxFormAttachments.003":
+      "Фактический объем эмиссий в пределах установленных нормативов",
+    "taxFormAttachments.004":
+      "Фактический объем эмиссий свех установленных нормативов",
+    "taxFormAttachments.005": "Остаток норматива на конец квартала"
   }
 ];
 
 const sectionFour = [
   {
-    "01.006":
+    "taxFormAttachments.006":
       "Ставка платы, установленная согласно статье 576 налогового кодекса",
-    "01.007":
+    "taxFormAttachments.007":
       "Размер повышения ставки платы по решению местных преставительных органов (п.8 ст. 576 налогового кодекса)",
-    "01.008":
+    "taxFormAttachments.008":
       "Ставка платы с учетом размера повышения ставки по решению местных представительных органов согласно п.8 ст. 576 Налогового кодекса)"
   }
 ];
@@ -128,6 +130,19 @@ const environmentalManagementType = {
   5: "размещение отходов производства и потребления",
   6: "Размешение серы"
 };
+
+const taxFormAttachmentsList = [
+  "permitNumber",
+  "permitIssueDate",
+  "permitObjectCategory",
+  "permitValidityStartDate",
+  "permitValidityEndDate",
+  "environmentalManagementType",
+  "pollutantTypeItem",
+  "pollutantTypeSubItem",
+  "pollutantTypeCode",
+  "environmentalUnit"
+];
 
 const datesList = [
   "notificationDate",
@@ -179,12 +194,12 @@ class Declaration extends Component {
       let balance = 0;
 
       Object.entries(sum).map(([key, value]) => {
-        if (key != "01.005") {
+        if (key != "taxFormAttachments.005") {
           balance = balance + parseFloat(value);
         }
       });
       this.props.form.setFieldsValue({
-        "01.005": balance
+        "taxFormAttachments.005": balance
       });
       this.setState({
         sumSectionThree: sum
@@ -227,16 +242,19 @@ class Declaration extends Component {
         console.log(error);
       });
 
+  succeedForm = () => {
+    message.success("Форма успешно создана");
+    return this.handleReset();
+  };
+
   async sendPostsAsync(body) {
     try {
-      // console.log(body);
-      // console.log(typeof body);
       axios
         .post(this.state.url, body)
         .then(response => this.succeedForm())
         .catch(function(error) {
           console.log(error);
-          message.success("Сохранено");
+          message.error("Неудачно");
         });
     } catch (e) {
       this.setState({ ...this.state, isFetching: false });
@@ -263,8 +281,6 @@ class Declaration extends Component {
       });
       if (!err) {
         console.log(values);
-
-        // this.formData(data);
       }
       this.formData(data);
     });
@@ -272,14 +288,31 @@ class Declaration extends Component {
 
   formData = data => {
     let temp = {
-      taxFormCells: []
+      taxFormCells: [],
+      taxFormAttachments: [
+        {
+          taxFormCells: []
+        }
+      ]
     };
-    console.log("data");
-    console.log(data);
+    console.log("forming");
 
     Object.entries(data).map(item => {
+      console.log(item);
+
       if (item[1]) {
-        if (item[1] == "") {
+        if (item[0] == "taxFormAttachments") {
+          Object.entries(item[1]).map(item => {
+            temp.taxFormAttachments[0].taxFormCells = [
+              ...temp.taxFormAttachments[0].taxFormCells,
+              {
+                cellKey: "870.01." + item[0],
+                cellValues: [item[1]]
+              }
+            ];
+          });
+        } else if (taxFormAttachmentsList.includes(item[0])) {
+          temp.taxFormAttachments[0][item[0]] = item[1];
         } else if (typeof item[1] == "object") {
           temp.taxFormCells = [
             ...temp.taxFormCells,
@@ -302,6 +335,8 @@ class Declaration extends Component {
       }
     });
     console.log(temp);
+    // delete temp.taxFormAttachments[0];
+    // temp.taxFormAttachments.map(item => delete item.taxFormCells[0]);
 
     this.sendPosts(temp);
   };
@@ -363,7 +398,8 @@ class Declaration extends Component {
                       <Icon type="home" />
                     </Breadcrumb.Item>
                     <Breadcrumb.Item>
-                      Декларация для малого бизнеса
+                      Декларация по плате за эмиссии в окружающую среду (Форма
+                      870.00)
                     </Breadcrumb.Item>
                   </Breadcrumb>
                 </>
@@ -374,7 +410,9 @@ class Declaration extends Component {
           <Row>
             <Typography.Title level={4}>
               <Paragraph editable={{ onChange: this.onChange }}>
-                {this.state.dataText ? this.state.dataText.text1 : ""}
+                {this.state.dataText
+                  ? this.state.dataText.text1
+                  : "Декларация по плате за эмиссии в окружающую среду (Форма 870.00)"}
               </Paragraph>
             </Typography.Title>
             <p></p>
@@ -791,7 +829,9 @@ class Declaration extends Component {
               <p></p>
               <Typography.Title level={4}>
                 <Paragraph editable={{ onChange: this.onChange2 }}>
-                  {this.state.dataText ? this.state.dataText.text2 : ""}
+                  {this.state.dataText
+                    ? this.state.dataText.text2
+                    : "Плата за эмиссию в окружающую среду (Приложение к декларации)"}
                 </Paragraph>
               </Typography.Title>
 
@@ -802,13 +842,13 @@ class Declaration extends Component {
               >
                 <Collapse.Panel header={sections[1]} key="0">
                   <Row gutter={20}>
-                    {/* <Col span={6}>
+                    <Col span={6}>
                       <Form.Item label="ИИН налогоплательщика">
                         {getFieldDecorator("taxPayerXin", {
                           initialValue: authed.taxPayerXin
                         })(<Input readOnly style={{ width: "100%" }} />)}
                       </Form.Item>
-                    </Col> */}
+                    </Col>
                     <Col span={6}>
                       <Form.Item label="БИН налогоплательщика">
                         {getFieldDecorator(
@@ -835,7 +875,7 @@ class Declaration extends Component {
                         />
                       </Form.Item>
                     </Col> */}
-                    {/* <Col span={6}>
+                    <Col span={6}>
                       <Form.Item
                         label={
                           <Tooltip title="Период, за который предоставляется налоговая отчетность (год)">
@@ -895,7 +935,7 @@ class Declaration extends Component {
                           </Select>
                         )}
                       </Form.Item>
-                    </Col> */}
+                    </Col>
                   </Row>
                   <Row gutter={20}>
                     <Col span={6}>
@@ -1084,7 +1124,7 @@ class Declaration extends Component {
                     </Col>
                   </Row>
                 </Collapse.Panel>
-                <Collapse.Panel header={sections[8]} key="8">
+                <Collapse.Panel header={sections[8]} key="88">
                   <Row gutter={20}>
                     {sectionThree.map(item =>
                       Object.entries(item).map(([key, value]) => (
@@ -1100,7 +1140,7 @@ class Declaration extends Component {
                                 }
                               ]
                             })(
-                              key == "01.005" ? (
+                              key == "taxFormAttachments.01.005" ? (
                                 <InputNumber
                                   readOnly
                                   type="number"
@@ -1159,7 +1199,7 @@ class Declaration extends Component {
                     <Col span={6}>
                       <Form.Item label="Коэффициенты, применяемые к плательщикам платы согласно п. 2 ст. 577 Налогового кодекса">
                         {getFieldDecorator(
-                          "coefficient",
+                          "taxFormAttachments.009",
                           {}
                         )(
                           <Select
@@ -1185,11 +1225,56 @@ class Declaration extends Component {
                         label={<Tooltip title={longTitle}>{longTitle}</Tooltip>}
                       >
                         {getFieldDecorator(
-                          "feeRate",
+                          "taxFormAttachments.010",
                           {}
                         )(
                           <InputNumber
-                            readOnly
+                            type="number"
+                            placeholder="Введите число"
+                            style={{ width: "100%" }}
+                          />
+                        )}
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Collapse.Panel>
+                <Collapse.Panel header={sections[7]} key="7">
+                  <Row gutter={20}>
+                    <Col span={6}>
+                      <Form.Item
+                        label={
+                          <Tooltip title="Сумма исчисленной платы в пределах установленного норматива">
+                            Сумма исчисленной платы в пределах установленного
+                            норматива
+                          </Tooltip>
+                        }
+                      >
+                        {getFieldDecorator(
+                          "taxFormAttachments.011",
+                          {}
+                        )(
+                          <InputNumber
+                            type="number"
+                            placeholder="Введите число"
+                            style={{ width: "100%" }}
+                          />
+                        )}
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item
+                        label={
+                          <Tooltip title="Сумма исчисленной платы сверх установленного норматива">
+                            Сумма исчисленной платы сверх установленного
+                            норматива
+                          </Tooltip>
+                        }
+                      >
+                        {getFieldDecorator(
+                          "taxFormAttachments.012",
+                          {}
+                        )(
+                          <InputNumber
                             type="number"
                             placeholder="Введите число"
                             style={{ width: "100%" }}

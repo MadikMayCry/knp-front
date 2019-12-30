@@ -9670,6 +9670,13 @@ rc-editor-mention@^1.1.13:
     rc-animate "^2.3.0"
     rc-editor-core "~0.8.3"
 
+rc-footer@^0.6.2:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/rc-footer/-/rc-footer-0.6.2.tgz#215c9bada63376da0120b3b5a08ad61ce2b97a12"
+  integrity sha512-r7qKHfcyvl7q4CIuvqizWWjZZZhenINCdeQprRBTZTj8X9lI1qdDwvqVI5bfATV8tnPkqhKoXpa9XellX+DEgw==
+  dependencies:
+    classnames "^2.2.1"
+
 rc-form@^2.4.10:
   version "2.4.11"
   resolved "https://registry.yarnpkg.com/rc-form/-/rc-form-2.4.11.tgz#61ee3ae579259684ae30f2c48f55f0f23a5d3d08"

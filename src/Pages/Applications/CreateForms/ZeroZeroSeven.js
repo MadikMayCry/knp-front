@@ -4,6 +4,7 @@ import moment from "moment";
 import CabinetHeader from "Layout/CabinetHeader";
 import fno_list from "fno_list.json";
 import monthList from "month_list.json";
+import UsefullLinks from "Utils/UsefullLinks"
 import {
   Row,
   Col,
@@ -25,8 +26,17 @@ import {
   Breadcrumb,
   Layout
 } from "antd";
+import { BrowserRouter as Router, Link, withRouter } from "react-router-dom";
 
 const title = "";
+
+const sections = {
+  1: "Раздел. Общая информация о налогоплательщике (налоговом агенте)",
+  2: "Раздел. Информация об отзываемой налоговой отчетности методом удаления",
+  3: "Раздел. Информация об отзываемой налоговой отчетности методом изменения",
+  4: "Раздел. Согласие налогоплательщика",
+  5: "Раздел. Ответственность налогоплательщика"
+};
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -61,6 +71,17 @@ const formType = {
   5: "Ликвидационная"
 };
 
+const someItems = {
+  oldContractNumber: null,
+  oldContractDate: null,
+  oldIsResident: null,
+  oldTaxOrgCode: "6202",
+  oldResidenceTaxOrgCode: "6202",
+  oldHalfYear: 1,
+  oldYear: 2019,
+  oldFormType: 1
+};
+
 const currencyCode = {
   1: "KZT",
   2: "RUB"
@@ -69,6 +90,8 @@ const currencyCode = {
 const datesList = [
   "postalStampDate",
   "receiveDate",
+  "oldContractDate",
+  "newContractDate",
   "recommencementDate",
   "sendDate",
   "suspensionContEndDate",
@@ -102,6 +125,7 @@ class ZeroZeroSeven extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      changeMethod: true,
       authedUser: {
         taxPayerXin: "560319301503",
         name: "Муратали",
@@ -157,6 +181,12 @@ class ZeroZeroSeven extends Component {
     this.sendPosts(data);
   };
 
+  handleChange = value => {
+    this.setState({
+      changeMethod: value
+    });
+  };
+
   handleReset = () => {
     this.props.form.resetFields();
   };
@@ -176,6 +206,9 @@ class ZeroZeroSeven extends Component {
   async sendPostsAsync(body) {
     try {
       console.log(body);
+      if (!this.state.changeMethod) {
+        Object.entries(someItems).map(([key, value]) => (body[key] = value));
+      }
       axios
         .post(this.state.url, body)
         .then(response => this.succeedForm())
@@ -222,895 +255,954 @@ class ZeroZeroSeven extends Component {
               type="info"
             ></Alert>
           </Row>
-          <Form onSubmit={this.submitAuditJournal} style={{ margin: "30px 0" }}>
-            <Row gutter={20}>
-              <Col span={6}>
-                <Form.Item label="ИИН налогоплательщика">
-                  {getFieldDecorator("taxPayerXin", {
-                    initialValue: authed.taxPayerXin
-                  })(<Input readOnly style={{ width: "100%" }} />)}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item label="Фамилия налогоплательщика">
-                  <Input
-                    readOnly
-                    value={authed.lastname}
-                    style={{ width: "100%" }}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item label="Имя налогоплательщика">
-                  <Input
-                    readOnly
-                    value={authed.name}
-                    style={{ width: "100%" }}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item label="Отчество налогоплательщика">
-                  <Input
-                    readOnly
-                    value={authed.patronymic}
-                    style={{ width: "100%" }}
-                  />
-                </Form.Item>
-              </Col>
+          <Row style={{ marginBottom: 10 }}>
+            <Typography.Title level={4}>
+              Налоговое заявление налогоплательщика (налогового агента) об
+              отзыве налоговой отчетности
+            </Typography.Title>
+            <p></p>
+            <Alert
+              message={
+                <Link to="instructions-007">
+                  Прочитайте правила составления налоговой отчетности
+                  «Упрощенная декларация субъектов малого бизнеса».
+                </Link>
+              }
+              type="warning"
+              showIcon
+            />
+          </Row>
+          <UsefullLinks />
 
-              <Col span={6}>
-                <Form.Item label="Код налоговой отчетности">
-                  {getFieldDecorator("formCode")(
-                    <Select
-                      style={{ width: "100%" }}
-                      placeholder="Выберите ФНО"
-                      optionFilterProp="children"
-                      allowClear
-                      showSearch
-                    >
-                      {this.optionFieldsJson(fno_list)}
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item label="Вид налоговой отчетности">
-                  {getFieldDecorator(
-                    "formType",
-                    {}
-                  )(
-                    <Select
-                      style={{ width: "100%" }}
-                      placeholder="Выберите вид"
-                      optionFilterProp="children"
-                      allowClear
-                      showSearch
-                    >
-                      {Object.entries(formType)
-                        .sort(([a], [b]) => a - b)
-                        .map(([key, value]) => (
-                          <Option value={parseInt(key, 10)} name={key}>
-                            {value}
-                          </Option>
-                        ))}
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={20}>
-              <Col span={8}>
-                <Form.Item label="Регистрационный номер">
-                  {getFieldDecorator("formRegistrationNumber", {
-                    rules: [
-                      {
-                        required: true,
-                        message: "Введите данные"
-                      }
-                    ]
-                  })(
-                    <Input
-                      style={{ width: "100%" }}
-                      placeholder="Введите номер"
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={4}>
-                <Form.Item label="Год">
-                  {getFieldDecorator("formYear")(
-                    <Select
-                      style={{ width: "100%" }}
-                      placeholder="Выберите Год"
-                      allowClear
-                    >
-                      {years().map(item => (
-                        <Option key={item} value={item}>
-                          {item}
-                        </Option>
-                      ))}
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={4}>
-                <Form.Item label="Полугодие">
-                  {getFieldDecorator("formHalfYear")(
-                    <Select
-                      style={{ width: "100%" }}
-                      placeholder="Выберите Полугодие"
-                    >
-                      {Object.entries(halfYearData).map(([key, item]) => (
-                        <Option value={key}>{item}</Option>
-                      ))}
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-
-              <Col span={4}>
-                <Form.Item label="Квартал">
-                  {/* {getFieldDecorator("quarter")( */}
-                  <Select
-                    style={{ width: "100%" }}
-                    placeholder="Выберите Квартал"
-                    allowClear
-                  >
-                    <Option value={1}>Первый квартал</Option>
-                    <Option value={2}>Второй квартал</Option>
-                    <Option value={3}>Третий квартал</Option>
-                    <Option value={4}>Четвертый квартал</Option>
-                  </Select>
-                  {/* )} */}
-                </Form.Item>
-              </Col>
-              <Col span={4}>
-                <Form.Item label="Месяц">
-                  {/* {getFieldDecorator("month")( */}
-                  <Select
-                    style={{ width: "100%" }}
-                    placeholder="Выберите месяц"
-                    name="month"
-                    showSearch
-                    allowClear
-                  >
-                    {Object.entries(monthList)
-                      .sort(([a], [b]) => a - b)
-                      .map(([key, value]) => (
-                        <Option value={key} name={key}>
-                          {value}
-                        </Option>
-                      ))}
-                  </Select>
-                  {/* )} */}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Form.Item
-                label="Укажите причину отзыва налоговой отчетности"
-                className="revocReason"
-              >
-                {getFieldDecorator("revocationReason", {
-                  rules: [
-                    {
-                      required: true,
-                      message: "Введите данные"
-                    }
-                  ]
-                })(
-                  <Radio.Group>
-                    {Object.entries(revocationReason).map(([key, value]) => (
-                      <Radio value={key}>{value}</Radio>
-                    ))}
-                  </Radio.Group>
-                )}
-              </Form.Item>
-            </Row>
-            <Row>
-              <Form.Item
-                label="Если в строке 4 отмечено «D», то отметьте в соответствующей ячейке причину"
-                className="revocReason"
-              >
-                {getFieldDecorator(
-                  "revocationReasonDetail",
-                  {}
-                )(
-                  <Radio.Group>
-                    {Object.entries(revocationReasonDetail).map(
-                      ([key, value]) => (
-                        <Radio value={key}>{value}</Radio>
-                      )
-                    )}
-                  </Radio.Group>
-                )}
-              </Form.Item>
-            </Row>
-            <Row gutter={20} type="flex" style={{ alignItems: "top" }}>
-              <Col span={12}>
-                <Form.Item>
-                  <Row type="flex" style={{ alignItems: "top" }}>
-                    <Button
-                      type="primary"
-                      shape="circle"
-                      style={{ marginRight: 20 }}
-                    >
-                      A
-                    </Button>
-                    <div>Не указан или неверно указан код валюты</div>
-                  </Row>
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item label="Прежнее содержание">
-                  {getFieldDecorator(
-                    "oldCurrencyCode",
-                    {}
-                  )(
-                    <Select
-                      style={{ width: "100%" }}
-                      placeholder="Выберите Код"
-                      allowClear
-                    >
-                      {Object.entries(currencyCode)
-                        .sort(([a], [b]) => a - b)
-                        .map(([key, value]) => (
-                          <Option value={parseInt(key, 10)} name={key}>
-                            {value}
-                          </Option>
-                        ))}
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item label="Новое содержание">
-                  {getFieldDecorator(
-                    "newCurrencyCode",
-                    {}
-                  )(
-                    <Select
-                      style={{ width: "100%" }}
-                      placeholder="Выберите Код"
-                      allowClear
-                    >
-                      {Object.entries(currencyCode)
-                        .sort(([a], [b]) => a - b)
-                        .map(([key, value]) => (
-                          <Option value={parseInt(key, 10)} name={key}>
-                            {value}
-                          </Option>
-                        ))}
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row
-              gutter={20}
-              type="flex"
-              style={{
-                alignItems: "top",
-                display: "flex",
-                flexWrap: "nowrap"
-              }}
+          <Row type="flex" style={{ justifyContent: "flex-end" }}>
+            <Select
+              defaultValue={true}
+              style={{ width: 320 }}
+              onChange={this.handleChange}
             >
-              <Col span={12}>
-                <Form.Item>
+              <Option value={true}>Методом изменения</Option>
+              <Option value={false}>Методом удаления</Option>
+            </Select>
+          </Row>
+          <Form onSubmit={this.submitAuditJournal} style={{ margin: "30px 0" }}>
+            <Collapse
+              bordered={false}
+              defaultActiveKey={["1"]}
+              style={{ backgroundColor: "transparent" }}
+            >
+              <Collapse.Panel header={sections[1]} key="1">
+                <Row gutter={20}>
+                  <Col span={6}>
+                    <Form.Item label="ИИН налогоплательщика">
+                      {getFieldDecorator("taxPayerXin", {
+                        initialValue: authed.taxPayerXin
+                      })(<Input readOnly style={{ width: "100%" }} />)}
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                    <Form.Item label="Фамилия налогоплательщика">
+                      <Input
+                        readOnly
+                        value={authed.lastname}
+                        style={{ width: "100%" }}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                    <Form.Item label="Имя налогоплательщика">
+                      <Input
+                        readOnly
+                        value={authed.name}
+                        style={{ width: "100%" }}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                    <Form.Item label="Отчество налогоплательщика">
+                      <Input
+                        readOnly
+                        value={authed.patronymic}
+                        style={{ width: "100%" }}
+                      />
+                    </Form.Item>
+                  </Col>
+
+                  <Col span={6}>
+                    <Form.Item label="Код налоговой отчетности">
+                      {getFieldDecorator("formCode")(
+                        <Select
+                          style={{ width: "100%" }}
+                          placeholder="Выберите ФНО"
+                          optionFilterProp="children"
+                          allowClear
+                          showSearch
+                        >
+                          {this.optionFieldsJson(fno_list)}
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                    <Form.Item label="Вид налоговой отчетности">
+                      {getFieldDecorator(
+                        "formType",
+                        {}
+                      )(
+                        <Select
+                          style={{ width: "100%" }}
+                          placeholder="Выберите вид"
+                          optionFilterProp="children"
+                          allowClear
+                          showSearch
+                        >
+                          {Object.entries(formType)
+                            .sort(([a], [b]) => a - b)
+                            .map(([key, value]) => (
+                              <Option value={parseInt(key, 10)} name={key}>
+                                {value}
+                              </Option>
+                            ))}
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={20}>
+                  <Col span={8}>
+                    <Form.Item label="Регистрационный номер">
+                      {getFieldDecorator("formRegistrationNumber", {
+                        rules: [
+                          {
+                            required: true,
+                            message: "Введите данные"
+                          }
+                        ]
+                      })(
+                        <Input
+                          style={{ width: "100%" }}
+                          placeholder="Введите номер"
+                        />
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={4}>
+                    <Form.Item label="Год">
+                      {getFieldDecorator("formYear")(
+                        <Select
+                          style={{ width: "100%" }}
+                          placeholder="Выберите Год"
+                          allowClear
+                        >
+                          {years().map(item => (
+                            <Option key={item} value={item}>
+                              {item}
+                            </Option>
+                          ))}
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={4}>
+                    <Form.Item label="Полугодие">
+                      {getFieldDecorator("formHalfYear")(
+                        <Select
+                          style={{ width: "100%" }}
+                          placeholder="Выберите Полугодие"
+                        >
+                          {Object.entries(halfYearData).map(([key, item]) => (
+                            <Option value={key}>{item}</Option>
+                          ))}
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+
+                  <Col span={4}>
+                    <Form.Item label="Квартал">
+                      {/* {getFieldDecorator("quarter")( */}
+                      <Select
+                        style={{ width: "100%" }}
+                        placeholder="Выберите Квартал"
+                        allowClear
+                      >
+                        <Option value={1}>Первый квартал</Option>
+                        <Option value={2}>Второй квартал</Option>
+                        <Option value={3}>Третий квартал</Option>
+                        <Option value={4}>Четвертый квартал</Option>
+                      </Select>
+                      {/* )} */}
+                    </Form.Item>
+                  </Col>
+                  <Col span={4}>
+                    <Form.Item label="Месяц">
+                      {/* {getFieldDecorator("month")( */}
+                      <Select
+                        style={{ width: "100%" }}
+                        placeholder="Выберите месяц"
+                        name="month"
+                        showSearch
+                        allowClear
+                      >
+                        {Object.entries(monthList)
+                          .sort(([a], [b]) => a - b)
+                          .map(([key, value]) => (
+                            <Option value={key} name={key}>
+                              {value}
+                            </Option>
+                          ))}
+                      </Select>
+                      {/* )} */}
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Collapse.Panel>
+              {this.state.changeMethod ? (
+                <Collapse.Panel header={sections[3]} key="3">
+                  <Row gutter={20} type="flex" style={{ alignItems: "top" }}>
+                    <Col span={12}>
+                      <Form.Item>
+                        <Row type="flex" style={{ alignItems: "top" }}>
+                          <Button
+                            type="primary"
+                            shape="circle"
+                            style={{ marginRight: 20 }}
+                          >
+                            A
+                          </Button>
+                          <div>Не указан или неверно указан код валюты</div>
+                        </Row>
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item label="Прежнее содержание">
+                        {getFieldDecorator(
+                          "oldCurrencyCode",
+                          {}
+                        )(
+                          <Select
+                            style={{ width: "100%" }}
+                            placeholder="Выберите Код"
+                            allowClear
+                          >
+                            {Object.entries(currencyCode)
+                              .sort(([a], [b]) => a - b)
+                              .map(([key, value]) => (
+                                <Option value={parseInt(key, 10)} name={key}>
+                                  {value}
+                                </Option>
+                              ))}
+                          </Select>
+                        )}
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item label="Новое содержание">
+                        {getFieldDecorator(
+                          "newCurrencyCode",
+                          {}
+                        )(
+                          <Select
+                            style={{ width: "100%" }}
+                            placeholder="Выберите Код"
+                            allowClear
+                          >
+                            {Object.entries(currencyCode)
+                              .sort(([a], [b]) => a - b)
+                              .map(([key, value]) => (
+                                <Option value={parseInt(key, 10)} name={key}>
+                                  {value}
+                                </Option>
+                              ))}
+                          </Select>
+                        )}
+                      </Form.Item>
+                    </Col>
+                  </Row>
                   <Row
+                    gutter={20}
                     type="flex"
                     style={{
+                      alignItems: "top",
                       display: "flex",
                       flexWrap: "nowrap"
                     }}
                   >
-                    <Button
-                      type="primary"
-                      shape="circle"
-                      style={{ marginRight: 20 }}
-                    >
-                      B
-                    </Button>
-                    <div className="desc-form">
-                      не указаны или неверно указаны номер и (или) дата
-                      контракта на недропользование:
-                    </div>
+                    <Col span={12}>
+                      <Form.Item>
+                        <Row
+                          type="flex"
+                          style={{
+                            display: "flex",
+                            flexWrap: "nowrap"
+                          }}
+                        >
+                          <Button
+                            type="primary"
+                            shape="circle"
+                            style={{ marginRight: 20 }}
+                          >
+                            B
+                          </Button>
+                          <div className="desc-form">
+                            не указаны или неверно указаны номер и (или) дата
+                            контракта на недропользование:
+                          </div>
+                        </Row>
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item>
+                        {getFieldDecorator(
+                          "oldContractDate",
+                          {}
+                        )(
+                          <DatePicker
+                            showTime
+                            format="YYYY-MM-DD"
+                            style={{
+                              width: "100%"
+                            }}
+                            placeholder="Дата "
+                          />
+                        )}
+                      </Form.Item>
+                      <Form.Item>
+                        {getFieldDecorator(
+                          "oldContractNumber",
+                          {}
+                        )(
+                          <Input
+                            placeholder="Номер"
+                            style={{ width: "100%" }}
+                          />
+                        )}
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item>
+                        {getFieldDecorator(
+                          "newContractDate",
+                          {}
+                        )(
+                          <DatePicker
+                            showTime
+                            format="YYYY-MM-DD"
+                            style={{
+                              width: "100%"
+                            }}
+                            placeholder="Дата "
+                          />
+                        )}
+                      </Form.Item>
+                      <Form.Item>
+                        {getFieldDecorator(
+                          "newContractNumber",
+                          {}
+                        )(
+                          <Input
+                            placeholder="Номер"
+                            style={{ width: "100%" }}
+                          />
+                        )}
+                      </Form.Item>
+                    </Col>
                   </Row>
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item>
-                  {getFieldDecorator(
-                    "oldContractDate",
-                    {}
-                  )(
-                    <DatePicker
-                      showTime
-                      format="YYYY-MM-DD"
-                      style={{
-                        width: "100%"
-                      }}
-                      placeholder="Дата "
-                    />
-                  )}
-                </Form.Item>
-                <Form.Item>
-                  {getFieldDecorator(
-                    "oldContractNumber",
-                    {}
-                  )(<Input placeholder="Номер" style={{ width: "100%" }} />)}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item>
-                  {getFieldDecorator(
-                    "newContractDate",
-                    {}
-                  )(
-                    <DatePicker
-                      showTime
-                      format="YYYY-MM-DD"
-                      style={{
-                        width: "100%"
-                      }}
-                      placeholder="Дата "
-                    />
-                  )}
-                </Form.Item>
-                <Form.Item>
-                  {getFieldDecorator(
-                    "newContractNumber",
-                    {}
-                  )(<Input placeholder="Номер" style={{ width: "100%" }} />)}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={20} type="flex" style={{ alignItems: "top" }}>
-              <Col span={12}>
-                <Form.Item>
-                  <Row type="flex" style={{ alignItems: "top" }}>
-                    <Button
-                      type="primary"
-                      shape="circle"
-                      style={{ marginRight: 20 }}
-                    >
-                      C
-                    </Button>
-                    <div className="desc-form">
-                      не указан или неверно указан статус резидентства:
-                    </div>
-                  </Row>
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item>
-                  {getFieldDecorator(
-                    "oldIsResident",
-                    {}
-                  )(
-                    <Select
-                      style={{ width: "100%" }}
-                      placeholder="Выберите признак"
-                    >
-                      <Option value={true}>
-                        резидент Республики Казахстан
-                      </Option>
-                      <Option value={false}>
-                        нерезидент Республики Казахстан
-                      </Option>
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item>
-                  {getFieldDecorator(
-                    "newIsResident",
-                    {}
-                  )(
-                    <Select
-                      style={{ width: "100%" }}
-                      placeholder="Выберите признак"
-                    >
-                      <Option value={true} key={true}>
-                        резидент Республики Казахстан
-                      </Option>
-                      <Option value={false} key={false}>
-                        нерезидент Республики Казахстан
-                      </Option>
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={20} type="flex" style={{ alignItems: "top" }}>
-              <Col span={12}>
-                <Form.Item>
-                  <Row type="flex" style={{ alignItems: "top" }}>
-                    <Button
-                      type="primary"
-                      shape="circle"
-                      style={{ marginRight: 20 }}
-                    >
-                      D
-                    </Button>
-                    <div className="desc-form">
-                      неверно указан код налогового органа
-                    </div>
-                  </Row>
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item>
-                  {getFieldDecorator(
-                    "oldTaxOrgCode",
-                    {}
-                  )(
-                    <Select
-                      style={{ width: "100%" }}
-                      placeholder="Выберите ОГД"
-                      allowClear
-                      optionFilterProp="children"
-                      showSearch
-                    >
-                      {this.state.ogd_all
-                        ? this.state.ogd_all.map(item => (
-                            <Option value={item.code}>
-                              {item.code}, {item.name}
+                  <Row gutter={20} type="flex" style={{ alignItems: "top" }}>
+                    <Col span={12}>
+                      <Form.Item>
+                        <Row type="flex" style={{ alignItems: "top" }}>
+                          <Button
+                            type="primary"
+                            shape="circle"
+                            style={{ marginRight: 20 }}
+                          >
+                            C
+                          </Button>
+                          <div className="desc-form">
+                            не указан или неверно указан статус резидентства:
+                          </div>
+                        </Row>
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item>
+                        {getFieldDecorator(
+                          "oldIsResident",
+                          {}
+                        )(
+                          <Select
+                            style={{ width: "100%" }}
+                            placeholder="Выберите признак"
+                          >
+                            <Option value={true}>
+                              резидент Республики Казахстан
                             </Option>
-                          ))
-                        : ""}
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item>
-                  {getFieldDecorator(
-                    "newTaxOrgCode",
-                    {}
-                  )(
-                    <Select
-                      style={{ width: "100%" }}
-                      placeholder="Выберите ОГД"
-                      allowClear
-                      optionFilterProp="children"
-                      showSearch
-                    >
-                      {this.state.ogd_all
-                        ? this.state.ogd_all.map(item => (
-                            <Option value={item.code}>
-                              {item.code}, {item.name}
+                            <Option value={false}>
+                              нерезидент Республики Казахстан
                             </Option>
-                          ))
-                        : ""}
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={20} type="flex" style={{ alignItems: "top" }}>
-              <Col span={12}>
-                <Form.Item>
-                  <Row type="flex" style={{ alignItems: "top" }}>
-                    <Button
-                      type="primary"
-                      shape="circle"
-                      style={{ marginRight: 20 }}
-                    >
-                      E
-                    </Button>
-                    <div className="desc-form">
-                      неверно указан код налогового органа*
-                    </div>
-                  </Row>
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item>
-                  {getFieldDecorator(
-                    "oldResidenceTaxOrgCode",
-                    {}
-                  )(
-                    <Select
-                      style={{ width: "100%" }}
-                      placeholder="Выберите ОГД"
-                      allowClear
-                      optionFilterProp="children"
-                      showSearch
-                    >
-                      {this.state.ogd_all
-                        ? this.state.ogd_all.map(item => (
-                            <Option value={item.code}>
-                              {item.code}, {item.name}
+                          </Select>
+                        )}
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item>
+                        {getFieldDecorator(
+                          "newIsResident",
+                          {}
+                        )(
+                          <Select
+                            style={{ width: "100%" }}
+                            placeholder="Выберите признак"
+                          >
+                            <Option value={true} key={true}>
+                              резидент Республики Казахстан
                             </Option>
-                          ))
-                        : ""}
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item>
-                  {getFieldDecorator(
-                    "newResidenceTaxOrgCode",
-                    {}
-                  )(
-                    <Select
-                      style={{ width: "100%" }}
-                      placeholder="Выберите ОГД"
-                      allowClear
-                      optionFilterProp="children"
-                      showSearch
-                    >
-                      {this.state.ogd_all
-                        ? this.state.ogd_all.map(item => (
-                            <Option value={item.code}>
-                              {item.code}, {item.name}
+                            <Option value={false} key={false}>
+                              нерезидент Республики Казахстан
                             </Option>
-                          ))
-                        : ""}
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={20} type="flex" style={{ alignItems: "top" }}>
-              <Col span={12}>
-                <Form.Item>
-                  <Row type="flex" style={{ alignItems: "top" }}>
-                    <Button
-                      type="primary"
-                      shape="circle"
-                      style={{ marginRight: 20 }}
-                    >
-                      F
-                    </Button>
-                    <div className="desc-form">
-                      неверно указан налоговый период
-                    </div>
+                          </Select>
+                        )}
+                      </Form.Item>
+                    </Col>
                   </Row>
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item>
-                  {getFieldDecorator("oldYear", {
-                    rules: [{ required: true, message: "Введите данные" }]
-                  })(
-                    <Select
-                      style={{ width: "100%" }}
-                      placeholder="Выберите Год"
-                      allowClear
-                    >
-                      {years().map(item => (
-                        <Option key={item} value={item}>
-                          {item}
-                        </Option>
-                      ))}
-                    </Select>
-                  )}
-                </Form.Item>
-                <Form.Item>
-                  {getFieldDecorator("oldHalfYear")(
-                    <Select
-                      style={{ width: "100%" }}
-                      placeholder="Выберите Полугодие"
-                    >
-                      {Object.entries(halfYearData).map(([key, item]) => (
-                        <Option value={key}>{item}</Option>
-                      ))}
-                    </Select>
-                  )}
-                </Form.Item>
-                <Form.Item>
-                  {/* {getFieldDecorator("quarter")( */}
-                  <Select
-                    style={{ width: "100%" }}
-                    placeholder="Выберите Квартал"
-                    allowClear
-                  >
-                    <Option value={1}>Первый квартал</Option>
-                    <Option value={2}>Второй квартал</Option>
-                    <Option value={3}>Третий квартал</Option>
-                    <Option value={4}>Четвертый квартал</Option>
-                  </Select>
-                  {/* )} */}
-                </Form.Item>
-                <Form.Item>
-                  {/* {getFieldDecorator("month")( */}
-                  <Select
-                    style={{ width: "100%" }}
-                    placeholder="Выберите месяц"
-                    name="month"
-                    showSearch
-                    allowClear
-                  >
-                    {Object.entries(monthList)
-                      .sort(([a], [b]) => a - b)
-                      .map(([key, value]) => (
-                        <Option value={key} name={key}>
-                          {value}
-                        </Option>
-                      ))}
-                  </Select>
-                  {/* )} */}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item>
-                  {getFieldDecorator("newYear")(
-                    <Select
-                      style={{ width: "100%" }}
-                      placeholder="Выберите Год"
-                      allowClear
-                    >
-                      {years().map(item => (
-                        <Option key={item} value={item}>
-                          {item}
-                        </Option>
-                      ))}
-                    </Select>
-                  )}
-                </Form.Item>
-                <Form.Item>
-                  {getFieldDecorator("newHalfYear")(
-                    <Select
-                      style={{ width: "100%" }}
-                      placeholder="Выберите Полугодие"
-                    >
-                      {Object.entries(halfYearData).map(([key, item]) => (
-                        <Option value={key}>{item}</Option>
-                      ))}
-                    </Select>
-                  )}
-                </Form.Item>
-                <Form.Item>
-                  {/* {getFieldDecorator("quarter")( */}
-                  <Select
-                    style={{ width: "100%" }}
-                    placeholder="Выберите Квартал"
-                    allowClear
-                  >
-                    <Option value={1}>Первый квартал</Option>
-                    <Option value={2}>Второй квартал</Option>
-                    <Option value={3}>Третий квартал</Option>
-                    <Option value={4}>Четвертый квартал</Option>
-                  </Select>
-                  {/* )} */}
-                </Form.Item>
-                <Form.Item>
-                  {/* {getFieldDecorator("month")( */}
-                  <Select
-                    style={{ width: "100%" }}
-                    placeholder="Выберите месяц"
-                    name="month"
-                    showSearch
-                    allowClear
-                  >
-                    {Object.entries(monthList)
-                      .sort(([a], [b]) => a - b)
-                      .map(([key, value]) => (
-                        <Option value={key} name={key}>
-                          {value}
-                        </Option>
-                      ))}
-                  </Select>
-                  {/* )} */}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={20} type="flex" style={{ alignItems: "top" }}>
-              <Col span={12}>
-                <Form.Item>
-                  <Row type="flex" style={{ alignItems: "top" }}>
-                    <Button
-                      type="primary"
-                      shape="circle"
-                      style={{ marginRight: 20 }}
-                    >
-                      G
-                    </Button>
-                    <div className="desc-form">
-                      неверно указан вид налоговой отчетности
-                    </div>
+                  <Row gutter={20} type="flex" style={{ alignItems: "top" }}>
+                    <Col span={12}>
+                      <Form.Item>
+                        <Row type="flex" style={{ alignItems: "top" }}>
+                          <Button
+                            type="primary"
+                            shape="circle"
+                            style={{ marginRight: 20 }}
+                          >
+                            D
+                          </Button>
+                          <div className="desc-form">
+                            неверно указан код налогового органа
+                          </div>
+                        </Row>
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item>
+                        {getFieldDecorator(
+                          "oldTaxOrgCode",
+                          {}
+                        )(
+                          <Select
+                            style={{ width: "100%" }}
+                            placeholder="Выберите ОГД"
+                            allowClear
+                            optionFilterProp="children"
+                            showSearch
+                          >
+                            {this.state.ogd_all
+                              ? this.state.ogd_all.map(item => (
+                                  <Option value={item.code}>
+                                    {item.code}, {item.name}
+                                  </Option>
+                                ))
+                              : ""}
+                          </Select>
+                        )}
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item>
+                        {getFieldDecorator(
+                          "newTaxOrgCode",
+                          {}
+                        )(
+                          <Select
+                            style={{ width: "100%" }}
+                            placeholder="Выберите ОГД"
+                            allowClear
+                            optionFilterProp="children"
+                            showSearch
+                          >
+                            {this.state.ogd_all
+                              ? this.state.ogd_all.map(item => (
+                                  <Option value={item.code}>
+                                    {item.code}, {item.name}
+                                  </Option>
+                                ))
+                              : ""}
+                          </Select>
+                        )}
+                      </Form.Item>
+                    </Col>
                   </Row>
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item>
-                  {getFieldDecorator(
-                    "oldFormType",
-                    {}
-                  )(
-                    <Select
-                      style={{ width: "100%" }}
-                      placeholder="Выберите вид"
-                      optionFilterProp="children"
-                      allowClear
-                      showSearch
-                    >
-                      {Object.entries(formType)
-                        .sort(([a], [b]) => a - b)
-                        .map(([key, value]) => (
-                          <Option value={parseInt(key, 10)} name={key}>
-                            {value}
-                          </Option>
-                        ))}
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item>
-                  {getFieldDecorator(
-                    "newFormType",
-                    {}
-                  )(
-                    <Select
-                      style={{ width: "100%" }}
-                      placeholder="Выберите вид"
-                      optionFilterProp="children"
-                      allowClear
-                      showSearch
-                    >
-                      {Object.entries(formType)
-                        .sort(([a], [b]) => a - b)
-                        .map(([key, value]) => (
-                          <Option value={parseInt(key, 10)} name={key}>
-                            {value}
-                          </Option>
-                        ))}
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={20} type="flex" style={{ alignItems: "top" }}>
-              <Col span={18}>
-                <Form.Item>
-                  <Row
-                    type="flex"
-                    style={{ display: "flex", flexWrap: "nowrap" }}
-                  >
-                    <Button
-                      type="primary"
-                      shape="circle"
-                      style={{ marginRight: 20 }}
-                    >
-                      H
-                    </Button>
-                    <div className="desc-form">
-                      отзыв ликвидационной налоговой отчетности в случае
-                      принятия налогоплательщиком решения о возобновлении
-                      деятельности после проведения налоговой проверки или
-                      завершения камерального контроля
-                    </div>
+                  <Row gutter={20} type="flex" style={{ alignItems: "top" }}>
+                    <Col span={12}>
+                      <Form.Item>
+                        <Row type="flex" style={{ alignItems: "top" }}>
+                          <Button
+                            type="primary"
+                            shape="circle"
+                            style={{ marginRight: 20 }}
+                          >
+                            E
+                          </Button>
+                          <div className="desc-form">
+                            неверно указан код налогового органа*
+                          </div>
+                        </Row>
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item>
+                        {getFieldDecorator(
+                          "oldResidenceTaxOrgCode",
+                          {}
+                        )(
+                          <Select
+                            style={{ width: "100%" }}
+                            placeholder="Выберите ОГД"
+                            allowClear
+                            optionFilterProp="children"
+                            showSearch
+                          >
+                            {this.state.ogd_all
+                              ? this.state.ogd_all.map(item => (
+                                  <Option value={item.code}>
+                                    {item.code}, {item.name}
+                                  </Option>
+                                ))
+                              : ""}
+                          </Select>
+                        )}
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item>
+                        {getFieldDecorator(
+                          "newResidenceTaxOrgCode",
+                          {}
+                        )(
+                          <Select
+                            style={{ width: "100%" }}
+                            placeholder="Выберите ОГД"
+                            allowClear
+                            optionFilterProp="children"
+                            showSearch
+                          >
+                            {this.state.ogd_all
+                              ? this.state.ogd_all.map(item => (
+                                  <Option value={item.code}>
+                                    {item.code}, {item.name}
+                                  </Option>
+                                ))
+                              : ""}
+                          </Select>
+                        )}
+                      </Form.Item>
+                    </Col>
                   </Row>
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item>
-                  {getFieldDecorator("isLiquidationToRegular", {
-                    valuePropName: "checked",
-                    initialValue: true
-                  })(<Checkbox></Checkbox>)}
-                </Form.Item>
-              </Col>
-            </Row>
+                  <Row gutter={20} type="flex" style={{ alignItems: "top" }}>
+                    <Col span={12}>
+                      <Form.Item>
+                        <Row type="flex" style={{ alignItems: "top" }}>
+                          <Button
+                            type="primary"
+                            shape="circle"
+                            style={{ marginRight: 20 }}
+                          >
+                            F
+                          </Button>
+                          <div className="desc-form">
+                            неверно указан налоговый период
+                          </div>
+                        </Row>
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item>
+                        {getFieldDecorator("oldYear", {
+                          rules: [{ required: true, message: "Введите данные" }]
+                        })(
+                          <Select
+                            style={{ width: "100%" }}
+                            placeholder="Выберите Год"
+                            allowClear
+                          >
+                            {years().map(item => (
+                              <Option key={item} value={item}>
+                                {item}
+                              </Option>
+                            ))}
+                          </Select>
+                        )}
+                      </Form.Item>
+                      <Form.Item>
+                        {getFieldDecorator("oldHalfYear")(
+                          <Select
+                            style={{ width: "100%" }}
+                            placeholder="Выберите Полугодие"
+                          >
+                            {Object.entries(halfYearData).map(([key, item]) => (
+                              <Option value={key}>{item}</Option>
+                            ))}
+                          </Select>
+                        )}
+                      </Form.Item>
+                      <Form.Item>
+                        {/* {getFieldDecorator("quarter")( */}
+                        <Select
+                          style={{ width: "100%" }}
+                          placeholder="Выберите Квартал"
+                          allowClear
+                        >
+                          <Option value={1}>Первый квартал</Option>
+                          <Option value={2}>Второй квартал</Option>
+                          <Option value={3}>Третий квартал</Option>
+                          <Option value={4}>Четвертый квартал</Option>
+                        </Select>
+                        {/* )} */}
+                      </Form.Item>
+                      <Form.Item>
+                        {/* {getFieldDecorator("month")( */}
+                        <Select
+                          style={{ width: "100%" }}
+                          placeholder="Выберите месяц"
+                          name="month"
+                          showSearch
+                          allowClear
+                        >
+                          {Object.entries(monthList)
+                            .sort(([a], [b]) => a - b)
+                            .map(([key, value]) => (
+                              <Option value={key} name={key}>
+                                {value}
+                              </Option>
+                            ))}
+                        </Select>
+                        {/* )} */}
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item>
+                        {getFieldDecorator("newYear")(
+                          <Select
+                            style={{ width: "100%" }}
+                            placeholder="Выберите Год"
+                            allowClear
+                          >
+                            {years().map(item => (
+                              <Option key={item} value={item}>
+                                {item}
+                              </Option>
+                            ))}
+                          </Select>
+                        )}
+                      </Form.Item>
+                      <Form.Item>
+                        {getFieldDecorator("newHalfYear")(
+                          <Select
+                            style={{ width: "100%" }}
+                            placeholder="Выберите Полугодие"
+                          >
+                            {Object.entries(halfYearData).map(([key, item]) => (
+                              <Option value={key}>{item}</Option>
+                            ))}
+                          </Select>
+                        )}
+                      </Form.Item>
+                      <Form.Item>
+                        {/* {getFieldDecorator("quarter")( */}
+                        <Select
+                          style={{ width: "100%" }}
+                          placeholder="Выберите Квартал"
+                          allowClear
+                        >
+                          <Option value={1}>Первый квартал</Option>
+                          <Option value={2}>Второй квартал</Option>
+                          <Option value={3}>Третий квартал</Option>
+                          <Option value={4}>Четвертый квартал</Option>
+                        </Select>
+                        {/* )} */}
+                      </Form.Item>
+                      <Form.Item>
+                        {/* {getFieldDecorator("month")( */}
+                        <Select
+                          style={{ width: "100%" }}
+                          placeholder="Выберите месяц"
+                          name="month"
+                          showSearch
+                          allowClear
+                        >
+                          {Object.entries(monthList)
+                            .sort(([a], [b]) => a - b)
+                            .map(([key, value]) => (
+                              <Option value={key} name={key}>
+                                {value}
+                              </Option>
+                            ))}
+                        </Select>
+                        {/* )} */}
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row gutter={20} type="flex" style={{ alignItems: "top" }}>
+                    <Col span={12}>
+                      <Form.Item>
+                        <Row type="flex" style={{ alignItems: "top" }}>
+                          <Button
+                            type="primary"
+                            shape="circle"
+                            style={{ marginRight: 20 }}
+                          >
+                            G
+                          </Button>
+                          <div className="desc-form">
+                            неверно указан вид налоговой отчетности
+                          </div>
+                        </Row>
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item>
+                        {getFieldDecorator(
+                          "oldFormType",
+                          {}
+                        )(
+                          <Select
+                            style={{ width: "100%" }}
+                            placeholder="Выберите вид"
+                            optionFilterProp="children"
+                            allowClear
+                            showSearch
+                          >
+                            {Object.entries(formType)
+                              .sort(([a], [b]) => a - b)
+                              .map(([key, value]) => (
+                                <Option value={parseInt(key, 10)} name={key}>
+                                  {value}
+                                </Option>
+                              ))}
+                          </Select>
+                        )}
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item>
+                        {getFieldDecorator(
+                          "newFormType",
+                          {}
+                        )(
+                          <Select
+                            style={{ width: "100%" }}
+                            placeholder="Выберите вид"
+                            optionFilterProp="children"
+                            allowClear
+                            showSearch
+                          >
+                            {Object.entries(formType)
+                              .sort(([a], [b]) => a - b)
+                              .map(([key, value]) => (
+                                <Option value={parseInt(key, 10)} name={key}>
+                                  {value}
+                                </Option>
+                              ))}
+                          </Select>
+                        )}
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row gutter={20} type="flex" style={{ alignItems: "top" }}>
+                    <Col span={18}>
+                      <Form.Item>
+                        <Row
+                          type="flex"
+                          style={{ display: "flex", flexWrap: "nowrap" }}
+                        >
+                          <Button
+                            type="primary"
+                            shape="circle"
+                            style={{ marginRight: 20 }}
+                          >
+                            H
+                          </Button>
+                          <div className="desc-form">
+                            отзыв ликвидационной налоговой отчетности в случае
+                            принятия налогоплательщиком решения о возобновлении
+                            деятельности после проведения налоговой проверки или
+                            завершения камерального контроля
+                          </div>
+                        </Row>
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item>
+                        {getFieldDecorator("isLiquidationToRegular", {
+                          valuePropName: "checked",
+                          initialValue: true
+                        })(<Checkbox></Checkbox>)}
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Collapse.Panel>
+              ) : (
+                <Collapse.Panel header={sections[2]} key="2">
+                  <Row>
+                    <Form.Item
+                      label="Укажите причину отзыва налоговой отчетности"
+                      className="revocReason"
+                    >
+                      {getFieldDecorator("revocationReason", {
+                        rules: [
+                          {
+                            required: true,
+                            message: "Введите данные"
+                          }
+                        ]
+                      })(
+                        <Radio.Group>
+                          {Object.entries(revocationReason).map(
+                            ([key, value]) => (
+                              <Radio value={key}>{value}</Radio>
+                            )
+                          )}
+                        </Radio.Group>
+                      )}
+                    </Form.Item>
+                  </Row>
+                  <Row>
+                    <Form.Item
+                      label="Если в строке 4 отмечено «D», то отметьте в соответствующей ячейке причину"
+                      className="revocReason"
+                    >
+                      {getFieldDecorator(
+                        "revocationReasonDetail",
+                        {}
+                      )(
+                        <Radio.Group>
+                          {Object.entries(revocationReasonDetail).map(
+                            ([key, value]) => (
+                              <Radio value={key}>{value}</Radio>
+                            )
+                          )}
+                        </Radio.Group>
+                      )}
+                    </Form.Item>
+                  </Row>
+                </Collapse.Panel>
+              )}
 
-            <Row gutter={20}>
-              <Col span={6} style={{ display: "none" }}>
-                <Form.Item label="Источник">
-                  {getFieldDecorator("submissiontype", {
-                    initialValue: "4",
-                    rules: [{ required: true, message: "Введите данные" }]
-                  })(<Input />)}
-                </Form.Item>
-              </Col>
-              <Col span={6} style={{ display: "none" }}>
-                <Form.Item label="Полное ФИО">
-                  {getFieldDecorator("taxPayerName", {
-                    initialValue: `${authed.name} ${authed.lastname} ${authed.patronymic}`
-                  })(<Input readOnly style={{ width: "100%" }} />)}
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item label="ФИО руководителя (налогоплательщика, налогового агента) уполномоченного представителя налогоплательщика">
-                  {getFieldDecorator("signingTaxPayerName")(
-                    <Input placeholder="Введите ФИО" />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item label="Входящий номер документа">
-                  {getFieldDecorator("incomingDocumentNumber")(
-                    <Input placeholder="Номер документа" />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item label="Код Огд">
-                  {getFieldDecorator("taxOrgCode", {
-                    rules: [{ required: true, message: "Введите данные" }]
-                  })(
-                    <Select
-                      style={{ width: "100%" }}
-                      placeholder="Выберите ОГД"
-                      allowClear
-                      optionFilterProp="children"
-                      showSearch
-                    >
-                      {this.state.ogd_all
-                        ? this.state.ogd_all.map(item => (
-                            <Option value={item.code}>
-                              {item.code}, {item.name}
-                            </Option>
-                          ))
-                        : ""}
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row type="flex" gutter={20}>
-              <Col span={6}>
-                <Form.Item label="Полное ФИО должностного лица, принявшего заявление">
-                  {getFieldDecorator(
-                    "signingOfficerName",
-                    {}
-                  )(
-                    <Input
-                      placeholder="Полное ФИО должностного лица"
-                      disabled
-                      style={{ width: "100%" }}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6} style={{ display: "none" }}>
-                <Form.Item label="Источник">
-                  {getFieldDecorator("sourceSystem", {
-                    initialValue: "1",
-                    rules: [{ required: true, message: "Введите данные" }]
-                  })(<Input />)}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item label="Дата подачи налогового заявления">
-                  {getFieldDecorator("sendDate", {
-                    initialValue: moment()
-                  })(<DatePicker style={{ width: "100%" }} disabled />)}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item label="Дата приема налогового заявления">
-                  {getFieldDecorator("receiveDate", {
-                    initialValue: moment()
-                  })(<DatePicker style={{ width: "100%" }} disabled />)}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item label="Дата почтового штемпеля">
-                  {getFieldDecorator(
-                    "postalStampDate",
-                    {}
-                  )(<DatePicker style={{ width: "100%" }} disabled />)}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row type="flex" style={{ marginTop: 30 }}>
-              <Button
-                type="danger"
-                onClick={this.handleReset}
-                className="mr-auto"
-              >
-                Очистить
-              </Button>
-              <Button type="primary" htmlType="submit">
-                Отправить
-              </Button>
-            </Row>
+              <Collapse.Panel header={sections[5]} key="5">
+                <Row gutter={20}>
+                  <Col span={6} style={{ display: "none" }}>
+                    <Form.Item label="Источник">
+                      {getFieldDecorator("submissiontype", {
+                        initialValue: "4",
+                        rules: [{ required: true, message: "Введите данные" }]
+                      })(<Input />)}
+                    </Form.Item>
+                  </Col>
+                  <Col span={6} style={{ display: "none" }}>
+                    <Form.Item label="Полное ФИО">
+                      {getFieldDecorator("taxPayerName", {
+                        initialValue: `${authed.name} ${authed.lastname} ${authed.patronymic}`
+                      })(<Input readOnly style={{ width: "100%" }} />)}
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item label="ФИО руководителя (налогоплательщика, налогового агента) уполномоченного представителя налогоплательщика">
+                      {getFieldDecorator("signingTaxPayerName")(
+                        <Input placeholder="Введите ФИО" />
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                    <Form.Item label="Входящий номер документа">
+                      {getFieldDecorator("incomingDocumentNumber")(
+                        <Input placeholder="Номер документа" />
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                    <Form.Item label="Код Огд">
+                      {getFieldDecorator("taxOrgCode", {
+                        rules: [{ required: true, message: "Введите данные" }]
+                      })(
+                        <Select
+                          style={{ width: "100%" }}
+                          placeholder="Выберите ОГД"
+                          allowClear
+                          optionFilterProp="children"
+                          showSearch
+                        >
+                          {this.state.ogd_all
+                            ? this.state.ogd_all.map(item => (
+                                <Option value={item.code}>
+                                  {item.code}, {item.name}
+                                </Option>
+                              ))
+                            : ""}
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+
+                <Row type="flex" gutter={20}>
+                  <Col span={6}>
+                    <Form.Item label="Полное ФИО должностного лица, принявшего заявление">
+                      {getFieldDecorator(
+                        "signingOfficerName",
+                        {}
+                      )(
+                        <Input
+                          placeholder="Полное ФИО должностного лица"
+                          disabled
+                          style={{ width: "100%" }}
+                        />
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={6} style={{ display: "none" }}>
+                    <Form.Item label="Источник">
+                      {getFieldDecorator("sourceSystem", {
+                        initialValue: "1",
+                        rules: [{ required: true, message: "Введите данные" }]
+                      })(<Input />)}
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                    <Form.Item label="Дата подачи налогового заявления">
+                      {getFieldDecorator("sendDate", {
+                        initialValue: moment()
+                      })(<DatePicker style={{ width: "100%" }} disabled />)}
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                    <Form.Item label="Дата приема налогового заявления">
+                      {getFieldDecorator("receiveDate", {
+                        initialValue: moment()
+                      })(<DatePicker style={{ width: "100%" }} disabled />)}
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                    <Form.Item label="Дата почтового штемпеля">
+                      {getFieldDecorator(
+                        "postalStampDate",
+                        {}
+                      )(<DatePicker style={{ width: "100%" }} disabled />)}
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Collapse.Panel>
+              <Row type="flex" style={{ marginTop: 30 }}>
+                <Button
+                  type="danger"
+                  onClick={this.handleReset}
+                  className="mr-auto"
+                >
+                  Очистить
+                </Button>
+                <Button type="primary" htmlType="submit">
+                  Отправить
+                </Button>
+              </Row>
+            </Collapse>
             <Row type="flex" style={{ marginTop: 20 }}>
               <Button type="default" style={{ marginRight: 10 }}>
                 Сохранить в КНП

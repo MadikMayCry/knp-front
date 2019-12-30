@@ -8,6 +8,7 @@ import {
   Icon,
   Modal,
   Divider,
+  Carousel,
   Steps,
   Alert,
   List,
@@ -25,6 +26,8 @@ import {
 import CabinetHeader from "Layout/CabinetHeader";
 
 import { Table, Tag } from "antd";
+
+import services from "services.json";
 
 const { Column, ColumnGroup } = Table;
 
@@ -174,57 +177,38 @@ const data_news = [
   }
 ];
 
-const data_service = [
+const dataRandom = [
   {
-    title: "Регистрационный учет лица, занимающегося частной практикой",
-    icon: "file-text",
-    icon_color: "#334ECD",
-    desc:
-      "Изменение сроков исполнения налогового обязательства по уплате налогов и (или) плат",
-    style: {
-      background: "rgba(51, 78, 205, 0.2)"
-    }
-  },
-  {
-    title: "Регистрация налогоплательщиков",
-    icon: "user",
-    icon_color: "#E53131",
-    desc:
-      "Изменение сроков исполнения налогового обязательства по уплате налогов и (или) плат",
-    style: {
-      background: "rgba(229, 49, 49, 0.2)"
-    }
-  },
-  {
-    title: "Регистрационный учет в качестве электронного налогоплательщика",
-    icon: "credit-card",
-    icon_color: "#2CCE1E",
-    desc:
-      "Изменение сроков исполнения налогового обязательства по уплате налогов и (или) плат",
-    style: {
-      background: "rgba(44, 206, 30, 0.2)"
-    }
-  },
-  {
-    title: "Регистрационный учет плательщиков налога на добавленную стоимость",
-    icon: "bell",
     icon_color: "#EFC224",
-    desc:
-      "Изменение сроков исполнения налогового обязательства по уплате налогов и (или) плат",
     style: {
       background: "rgba(239, 194, 36, 0.2)"
     }
   },
   {
-    title: "Выдача лицензии на производство этилового спирта",
-    icon: "user",
+    icon_color: "#334ECD",
+    style: {
+      background: "rgba(51, 78, 205, 0.2)"
+    }
+  },
+  {
     icon_color: "#E53131",
-    desc:
-      "Изменение сроков исполнения налогового обязательства по уплате налогов и (или) плат",
     style: {
       background: "rgba(229, 49, 49, 0.2)"
     }
+  },
+  {
+    icon_color: "#2CCE1E",
+    style: {
+      background: "rgba(44, 206, 30, 0.2)"
+    }
   }
+];
+
+const myArr = [
+  services.slice(0, 6),
+  services.slice(6, 12),
+  services.slice(12, 18),
+  services.slice(18, 24)
 ];
 
 class Home extends Component {
@@ -239,6 +223,9 @@ class Home extends Component {
     };
   }
 
+  onChange = (a, b, c) => {
+    console.log(a, b, c);
+  };
   showModal = e => {
     console.log(e.target.name);
 
@@ -390,42 +377,58 @@ class Home extends Component {
                 <div className="card">
                   <h4>Государственные услуги</h4>
                   <Divider style={{ margin: "15px 0" }} />
-                  <List
-                    itemLayout="horizontal"
-                    dataSource={data_service}
-                    renderItem={item => (
-                      <List.Item>
-                        <List.Item.Meta
-                          avatar={
-                            <Avatar
-                              shape="square"
-                              size="large"
-                              // icon={item.icon ? item.icon : "user"}
-                              style={item.style}
-                            >
-                              <Icon
-                                type={item.icon}
-                                style={{
-                                  fontSize: "20px",
-                                  color: `${item.icon_color}`
-                                }}
-                                theme="outlined"
+
+                  <Carousel vertical afterChange={this.onChange}>
+                    {myArr.map(item => {
+                      let temp =
+                        dataRandom[
+                          Math.floor(Math.random() * dataRandom.length)
+                        ];
+                      return (
+                        <List
+                          className="main-list"
+                          itemLayout="horizontal"
+                          dataSource={item}
+                          renderItem={item => (
+                            <List.Item>
+                              <List.Item.Meta
+                                avatar={
+                                  <Avatar
+                                    shape="square"
+                                    size="large"
+                                    // icon={item.icon ? item.icon : "user"}
+                                    style={temp.style}
+                                  >
+                                    <Icon
+                                      type={item.icon}
+                                      style={{
+                                        fontSize: "20px",
+                                        color: `${temp.icon_color}`
+                                      }}
+                                      theme="outlined"
+                                    />
+                                  </Avatar>
+                                }
+                                title={
+                                  <Link to={item.url? item.url : "/home"} className="some-title">
+                                    {item.title}
+                                  </Link>
+                                }
+                                // description={item.desc}
                               />
-                            </Avatar>
-                          }
-                          title={<a href="">{item.title}</a>}
-                          // description={item.desc}
+                            </List.Item>
+                          )}
                         />
-                      </List.Item>
-                    )}
-                  />
+                      );
+                    })}
+                  </Carousel>
                 </div>
               </div>
             </Col>
             <Col span={8}>
               <div className="card-wrapper">
                 <div className="card">
-                  <h4>Сервисы</h4>
+                  <h4>Электронные сервисы</h4>
                   <Divider style={{ margin: "15px 0px" }} />
                   <List
                     className="services"

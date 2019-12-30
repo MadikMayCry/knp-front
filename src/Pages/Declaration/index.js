@@ -328,6 +328,10 @@ class Declaration extends Component {
       .catch(function(error) {
         console.log(error);
       });
+  succeedForm = () => {
+    message.success("Форма успешно создана");
+    return this.handleReset();
+  };
 
   async sendPostsAsync(body) {
     try {

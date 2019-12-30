@@ -1,6 +1,7 @@
 import React from "react";
 import { ThemeProvider } from "styled-components";
 import MainSider from "Layout/MainSider/index";
+import Footer from "./Footer";
 
 import { Layout, Menu, Breadcrumb, Icon } from "antd";
 import ChatBot from "react-simple-chatbot";
@@ -61,7 +62,7 @@ const steps = [
     trigger: 4
   }
 ];
-const { Header, Content, Footer } = Layout;
+const { Header, Content } = Layout;
 const { SubMenu } = Menu;
 
 class MainLayout extends React.Component {
@@ -72,10 +73,14 @@ class MainLayout extends React.Component {
         <MainSider />
         <Layout style={{ backgroundColor: "#F0F3F9" }}>
           <ComponentLayout {...rest} />
-          <Footer style={{ textAlign: "center" }}>КГД ©2019</Footer>
+          <Footer></Footer>
         </Layout>
         <ThemeProvider theme={theme}>
-          <ChatBot floating={true} steps={steps} headerTitle="Умный бот Алибек"/>
+          <ChatBot
+            floating={true}
+            steps={steps}
+            headerTitle="Умный бот Алибек"
+          />
         </ThemeProvider>
       </Layout>
     );
