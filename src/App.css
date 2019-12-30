@@ -411,6 +411,11 @@ a {
   width: 100%;
 }
 
+/* dangerStyle!!! */
+[class="ant-list-items"] {
+  text-align: left !important;
+}
+
 .card .card-link {
   margin-top: 10px;
   margin-left: auto;
@@ -637,7 +642,7 @@ a {
   flex-wrap: nowrap;
 }
 
-.header-title{
+.header-title {
   font-weight: bold;
   font-size: 14px;
 }
