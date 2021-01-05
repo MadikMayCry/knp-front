@@ -5,7 +5,7 @@
   "dependencies": {
     "@emotion/core": "^10.0.22",
     "antd": "^3.25.3",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "faker": "^4.1.0",
     "pdfmake": "^0.1.63",
     "rc-footer": "^0.6.2",
